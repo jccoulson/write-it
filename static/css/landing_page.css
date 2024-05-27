@@ -73,11 +73,10 @@ body {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     width: 5vw;
     height: 9vh;
-    overflow:auto;
     margin-left: 50%; /* align to the left */
     padding-bottom: 0px;
     z-index: 1;
-    overflow:auto;
+    overflow:clip;
 }
 
 .intro_text {
@@ -93,7 +92,7 @@ body {
     width: 45%;
     height: 20%;
     margin-left: -40%; 
-    overflow:hidden;
+    overflow:clip;
 }
 
 .intro_title{
@@ -111,19 +110,22 @@ body {
     margin-left: -74%; 
     overflow:visible;
 }
-
-.intro_button {
+.difficulty_nav {
     text-align: center;
-    background-color: black;
     position: absolute;
     top: 60%;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 1vw;
     width: 7%;
     height:5%;
     margin-left: -78%; 
     overflow:visible;
+}
+.intro_button {
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    font-size: 1vw;
+    border: none;
+    cursor: pointer;
 }

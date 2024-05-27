@@ -12,10 +12,21 @@ api_key = os.getenv("AZURE_OAI_KEY")
 azure_endpoint = os.getenv("AZURE_OAI_ENDPOINT")
 api_version = os.getenv("AZURE_OAI_VERSION")
 
+
 #route for the landing page
 @app.route('/')
 def landing_page():
     return render_template('landing_page.html')
+
+#route for the difficulty selection page
+@app.route('/difficulty')
+def difficulty():
+    return render_template('difficulty.html')
+
+#route for the rankings  page
+@app.route('/rankings')
+def rankings():
+    return render_template('rankings.html')
 
 #route for the chat page
 @app.route('/chat', methods=['POST', 'GET'])
