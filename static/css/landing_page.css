@@ -112,18 +112,22 @@ body {
     overflow:visible;
 }
 
-.intro_button {
+.prompt_nav {
     text-align: center;
-    background-color: black;
     position: absolute;
     top: 60%;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 1vw;
     width: 7%;
     height:5%;
     margin-left: -78%; 
     overflow:visible;
+}
+.intro_button {
+    height: 100%;
+    width: 100%;
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    font-size: 1vw;
+    border: none;
+    cursor: pointer;
 }

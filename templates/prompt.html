@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/navbar.css"> 
+    <link rel="stylesheet" href="/static/css/prompt.css"> 
+    <script src="/static/js/timer.js" defer></script>
+    <title>Countdown Timer</title>
+</head>
+<div class="topnav">
+    <a href="/">Home</a>
+    <a class="active" href="#prompt">Prompt</a>
+    <a href="#contact">Contact</a>
+    <a href="#about">About</a>
+  </div>
+<body>
+    <div class="container">
+        <div id="timer" class="timer">05:00</div>
+        <div class="prompt-box">
+            <p>{{response_text}}</p>
+        </div>
+        <div class="writing-area">
+            <textarea placeholder="Start writing here..."></textarea>
+        </div>
+    <a class = "analysis_nav", href="/analysis">
+        <button type="button" class="analysis_button">Submit</button>
+    </form>
+    </div>
+
+
+</body>
+</html>
