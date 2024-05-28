@@ -21,12 +21,12 @@
         <div class="prompt-box">
             <p>{{response_text}}</p>
         </div>
-        <div class="writing-area">
-            <textarea placeholder="Start writing here..."></textarea>
-        </div>
-    <a class = "analysis_nav", href="/analysis">
-        <button type="button" class="analysis_button">Submit</button>
-    </form>
+        <form action="/analysis" method="post">
+            <div class="writing-area">
+                <textarea name="inputEssay" placeholder="Start writing here..."></textarea>
+            </div>
+            <button type="submit" class="analysis_button">Submit</button>
+        </form>
     </div>
 
 

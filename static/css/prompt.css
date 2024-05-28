@@ -66,18 +66,12 @@ body {
 
 
 /*button to navigate to analysis page off of prompt page*/
-.analysis_nav {
-    text-align: center;
-    position: absolute;
-    top: 105%;
-    width: 12%;
-    height:9%;
-    margin-left: -8%; 
-    overflow:visible;
-}
 .analysis_button {
-    height: 100%;
-    width: 100%;
+    margin-top: 30px;
+    padding: 20px;
+    height:9%;
+    width: 12%;
+    top: 25%;
     background-color: black;
     color: white;
     border-radius: 5px;

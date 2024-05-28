@@ -3,25 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/navbar.css"> 
+    <link rel="stylesheet" href="/static/css/analysis.css">
     <title>Analysis Page</title>
 </head>
-<body>
-    <header>
-        <h1>Analysis Dashboard</h1>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About</a></li>
-            <li><a href="/contact">Contact</a></li>
-        </ul>
-    </nav>
-    <main>
-        <section>
-            <h2>Data Analysis Section</h2>
-            <p>This section will display analysis results.</p>
-        </section>
-    </main>
-
-</body>
-</html>
+<div class="topnav">
+    <a href="/">Home</a>
+    <a class="active" href="#prompt">Prompt</a>
+    <a href="#contact">Contact</a>
+    <a href="#about">About</a>
+  </div>
+  <body>
+    <div class="container">
+        <header class="header">
+            <h1>Essay Analysis</h1>
+        </header>
+        <div class="main-content">
+            <div class="text-analysis">
+                <section class="original-essay">
+                    <h2>Original Essay</h2>
+                    <p>
+                        {{response_list[0]}}
+                    </p>
+                </section>
+                <section class="essay-analysis">
+                    <h2>Analysis</h2>
+                    <p>
+                        {{response_list[1]}}
+                    </p>
+                </section>
+            </div>
+            <div class="additional-info">
+                <section class="essay-score">
+                    <h2>Score</h2>
+                    <p>{{response_list[2]}}</p>
+                </section>
+                <section class="key-moments">
+                    <h2>Key Moments</h2>
+                    <ul>
+                        <li><strong>Sentence:</strong> {{text_parts[0]}} 
+                        <br>
+                        <strong>Commentary:</strong> {{analysis_parts[0]}}</li>
+                        <li><strong>Sentence:</strong> {{text_parts[1]}}  
+                        <br>
+                        <strong>Commentary:</strong> {{analysis_parts[1]}}</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+    </div>
+    </body>
+    </html>
