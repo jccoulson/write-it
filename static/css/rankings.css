@@ -1,39 +1,95 @@
-body {
+/* taken as a reference from: https://www.w3schools.com/howto/howto_css_table_side_by_side.asp */
+/* the * sign is a universal selector that targets all elements on the current page */
+* {
+    /* border box is a specific way of calculating/manage size of elements */
+    box-sizing: border-box;
+  }
+  
+  .row {
+    margin-left:-5px;
+    margin-right:-5px;
+    margin-top: 5%;
+  }
+    
+  .column {
+    float: left;
+    width: 33%;
+    padding: 5px;
+  }
+
+  .row::after {
+    content: "";
+    clear: both;
+    display: table;
+  }
+
+  /* this applies to all tables, ex: rounding the corners */
+  table {
+    border-collapse:separate;
+    border:solid #dde4ff 6px;
+    border-radius:8px;
+    table-layout:fixed;
+    border-spacing: 0;
+    width: 100%;
+  }
+  
+  th {
+    text-align: center;
+    padding: 8px;
+  }
+
+  /* on html file, changed the names to <p> type to enable the overflow with ellipsis */
+  p{
+    max-width: 100%;
+    overflow:hidden;
+    text-overflow: ellipsis;
+}
+ body {
     font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
+    text-align: center;
+    margin:0;
     height: 100vh;
     width: 100vw;
     background-color: #E7ECFF;
-    padding-left: 0;
-}
+} 
 
-/* work in progress, need to find a good design for the ranking ladder */
-.ranking_container{
-    display: flex;
-    justify-content: space-around; /* enables proper distribution around the screen */
-    align-items: center;
-    width: 100%;
-    height: 100%;
-
-}
-/* for now, just a placeholder for visual spacing */
-.ranking_ladder{
+.normal_ranking tr,
+.challenge_ranking tr,
+.creative_ranking tr {
     text-align: center;
-    padding: 10px;
-    top: 15%; /* adjust from the top to bottom */
-    position: absolute;
-    border-radius: 8px;
-    background: #DAE9DB;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    width: 65vw;
-    height: 80vh;
-    overflow:auto;
-    margin-left: 0%;
-    padding-bottom: 0;
-    z-index: 1;
+}
+
+/* for the sake of consistency and readability, bunch all the 3 table containers to change color-scheme */
+.normal_ranking tr:nth-child(even), .challenge_ranking tr:nth-child(even), .creative_ranking tr:nth-child(even) {
+    background: #dde4ff;
+}
+
+.normal_ranking tr:nth-child(odd), .challenge_ranking tr:nth-child(odd), .creative_ranking tr:nth-child(odd) {
+    background: #c1cdff;
+}
+
+button {
+    overflow: hidden;
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    font-size: 15px;
+    padding:5px;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: white;
+    color: black;
+}  
+
+/* when screen/viewport is 1200 or less this activates */
+@media screen and (max-width: 1200px) {
+    .row{
+        margin-left: 20%;
+    }
+    .column {
+        width: 70%;
+    }
 }
