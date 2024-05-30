@@ -1,0 +1,73 @@
+/* see code referenced from rankings.css */
+*{
+    box-sizing: border-box;
+}
+  
+.row {
+    margin-left:9.5%;
+    margin-top: 5%;
+}
+    
+.column {
+    float: left;
+    width: 33%;
+    padding: 5px;
+}
+
+.row::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+body {
+    text-align: center;
+    margin:0;
+    height: 100vh;
+    width: 100vw;
+    background-color: #E7ECFF;
+}
+
+/* parent class changes for the 3-gametype containers */
+.container {
+    padding: 10px;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    width: 75%;
+    height: 70vh;
+
+}
+
+/* generally we want the same properties on all of the choices for consistency */
+.challenge_prompt_button,
+.creative_prompt_button,
+.normal_prompt_button{
+    top: 0%;
+    margin-left: 0%; 
+    height: 10%;
+    width: 30%;
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    font-size: 15px;
+    padding:5px;
+    border: none;
+    cursor: pointer;
+    z-index: 1;
+}
+
+button:hover {
+    background-color: rgb(231, 231, 231);
+    color: black;
+}  
+
+/* when the viewport is 1300 or less, this activates */
+@media screen and (max-width: 1300px) {
+    .row {
+        margin-left: 28%;
+    }
+    .column {
+        width: 90%;
+    }
+}
