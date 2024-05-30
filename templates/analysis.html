@@ -9,11 +9,18 @@
 </head>
 <div class="topnav">
     <a href="/">Home</a>
-    <a class="active" href="#prompt">Prompt</a>
-    <a href="#contact">Contact</a>
+    <a href="#difficulty">Difficulty</a>
+    <a href="#rankings">Rank Ladder</a>
     <a href="#about">About</a>
-  </div>
-  <body>
+    <a href="#contact">Contact</a>
+    {% if current_user.is_authenticated %}
+        <a href="{{ url_for('logout') }}" class="auth-link">Logout</a>
+    {% else %}
+        <a href="{{ url_for('login') }}" class="auth-link active">Login</a>
+        <a href="{{ url_for('create_account') }}" class="auth-link">Sign Up</a>
+    {% endif %}
+</div>
+<body>
     <div class="container">
         <header class="header">
             <h1>Essay Analysis</h1>

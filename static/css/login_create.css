@@ -1,0 +1,66 @@
+body {
+    height: 100vh;
+    width: 100vw;
+    background-color: #E7ECFF;
+    font-family: 'Arial', sans-serif;
+    margin:0
+}
+
+/*paper iamge above login*/
+img {
+    width: 40%;
+    height:40%
+  }
+
+  /*container with all login elements*/
+.container {
+    min-width: 500px;
+    text-align: center;
+    width: 20%;
+    margin: 0 auto;
+    margin-top: 5%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    box-shadow: 2px 2px 8px #888888;
+
+    border-radius: 8px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input {
+    width: 50%;
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+button:hover {
+    opacity: 0.8;
+}
+
+/*for messages such as account exists and login required*/
+.alert {
+    background-color: #f4f4f4;
+    border-left: 6px solid #ccc;
+    margin-top: 20px;
+    padding: 10px;
+}
+
+.alert p {
+    margin: 0;
+}
