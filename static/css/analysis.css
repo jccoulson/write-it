@@ -1,0 +1,64 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background: #f9f9f9;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+}
+
+/*essay analysis part*/
+.header {
+    background: #94ec9a;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    border-radius: 8px;
+}
+
+.main-content {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 20px;
+}
+
+.text-analysis, .additional-info {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+section {
+    margin-bottom: 20px;
+}
+
+section h2 {
+    color: #94ec9a;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+/*isolated analysis portion*/
+li {
+    padding: 10px;
+    background: #eef;
+    margin-bottom: 10px;
+    border-left: 4px solid #007bff;
+    border-radius: 4px;
+}
+
+li strong {
+    color: #94ec9a;
+}
+
+

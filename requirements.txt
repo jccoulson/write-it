@@ -1,3 +1,6 @@
 Flask==3.0.3
 openai==1.30.2
 python-dotenv==1.0.1
+pymongo==4.7.2
+dnspython==2.6.1
+Flask-login==0.6.3

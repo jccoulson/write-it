@@ -1,3 +1,5 @@
+/*navbar currently based off w3 schools: https://www.w3schools.com/howto/howto_js_topnav.asp*/
+/* Add a black background color to the top navigation */
 .topnav {
   background-color: #333;
   overflow: hidden;
@@ -10,6 +12,11 @@
   padding: 14px 16px;
   text-decoration: none;
   font-size: 17px;
+}
+
+/*for login, create account, and logout*/
+.topnav a.auth-link {
+  float: right;
 }
 
 .topnav a:hover {
