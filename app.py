@@ -40,6 +40,7 @@ def landing_page():
 
 #route for the difficulty selection page
 @app.route('/difficulty')
+@login_required
 def difficulty():
     return render_template('difficulty.html')
 

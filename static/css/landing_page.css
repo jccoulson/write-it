@@ -19,6 +19,7 @@ body {
     top:10%;
 }
 
+
 /* big bg vertcal container */
 .bg_container{
     position:absolute;
@@ -34,6 +35,7 @@ body {
     margin-left: 65%;
     z-index: 0; 
     min-width: 250px;
+    min-height: 500px;
 }
 
 /* cubical foreground larger container*/
@@ -52,6 +54,7 @@ body {
     padding-bottom: 0;
     z-index: 1;
     min-width: 150px;
+    min-height: 150px;
 }
 
 /* cubical foreground medium container*/
@@ -70,6 +73,7 @@ body {
     padding-bottom: 0;
     z-index: 1;
     min-width: 100px;
+    min-height: 100px;
 }
 
 /* cubical foreground larger container*/
@@ -88,6 +92,7 @@ body {
     z-index: 1;
     overflow:clip;
     min-width: 70px;
+    min-height: 70px;
 }
 
 .intro_title{
@@ -116,7 +121,7 @@ body {
     text-overflow: ellipsis;
 }
 
-.prompt_nav {
+.intro_button {
     text-align: center;
     margin-top:5%;
     height: 5vh;
@@ -132,14 +137,4 @@ body {
 
 button:hover{
     opacity: 70%;
-}
-.intro_button {
-    height: 100%;
-    width: 100%;
-    background-color: black;
-    color: white;
-    border-radius: 5px;
-    font-size: 1vw;
-    border: none;
-    cursor: pointer;
 }
