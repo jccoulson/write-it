@@ -11,6 +11,7 @@ body {
 
 /* for the title,text and button */
 .write_it_content{
+    margin:0;
     min-width: 50px;
     min-height: 50px;
     text-align: left;
@@ -22,6 +23,7 @@ body {
 
 /* big bg vertcal container */
 .bg_container{
+    margin:0;
     position:absolute;
     top:20%;
     text-align: center;
@@ -40,6 +42,7 @@ body {
 
 /* cubical foreground larger container*/
 .large_container{
+    margin:0;
     text-align: center;
     padding: 10px;
     top: 27%; /* adjust from the top to bottom */
@@ -59,6 +62,7 @@ body {
 
 /* cubical foreground medium container*/
 .medium_container{
+    margin:0;
     text-align: center;
     padding: 10px;
     top: 50%; /* height from top */
@@ -78,6 +82,7 @@ body {
 
 /* cubical foreground larger container*/
 .small_container{
+    margin:0;
     text-align: center;
     padding: 10px;
     top: 78%; /* height from top */
@@ -96,6 +101,7 @@ body {
 }
 
 .intro_title{
+    margin:0;
     margin-top:15%;
     color: black;
     border: none; 
