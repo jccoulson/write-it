@@ -19,6 +19,8 @@ app.secret_key = os.getenv("SECRET_KEY")
 client = MongoClient('mongodb://localhost:27017/')
 db = client['writeit_db']  #the writeit-database
 users_collection = db.users
+#collection for daily essays
+essays_collection = db.essays
 
 #login setup
 login_manager = LoginManager()
@@ -52,6 +54,9 @@ def rankings():
 
 #generate the writing prompts, should be called once per day
 def generate_prompts():
+    #delete all of essays_collection, modify later to certain time period if want some history
+    essays_collection.delete_many({})
+
     list_of_prompts = []
 
     #### Generate Normal Prompt ####
@@ -73,7 +78,7 @@ def generate_prompts():
     ]
 
     response = client.chat.completions.create(
-        model="gpt-35-turbo",
+        model="gpt-4",
         max_tokens=200,
         messages=messages_array
     )
@@ -95,7 +100,7 @@ def generate_prompts():
     ]
 
     response = client.chat.completions.create(
-        model="gpt-35-turbo",
+        model="gpt-4",
         max_tokens=200,
         messages=messages_array
     )
@@ -117,7 +122,7 @@ def generate_prompts():
     ]
 
     response = client.chat.completions.create(
-        model="gpt-35-turbo",
+        model="gpt-4",
         max_tokens=200,
         messages=messages_array
     )
@@ -143,11 +148,11 @@ def prompt():
 
     mode = request.form['mode']
     if mode == 'normal':
-        return render_template('prompt.html',response_text=current_prompts[0])
+        return render_template('prompt.html',response_text=current_prompts[0], current_mode = mode) #pass difficulty to prompt page for later storage
     if mode == 'creative':
-        return render_template('prompt.html',response_text=current_prompts[1])
+        return render_template('prompt.html',response_text=current_prompts[1], current_mode = mode)
     if mode == 'challenge':
-        return render_template('prompt.html',response_text=current_prompts[2])
+        return render_template('prompt.html',response_text=current_prompts[2], current_mode = mode)
     else:
         return redirect('/difficulty')
    
@@ -166,8 +171,12 @@ def analysis():
             api_key=api_key,
             api_version=api_version
         )
-        #get message from form submission on button press
+        #get form data from submission of essay
         input_essay = request.form['inputEssay']
+        mode = request.form['mode']
+
+
+        
 
         #will display back their essay on page
         response_list[0] = input_essay
@@ -245,6 +254,19 @@ def analysis():
         )
         score_analysis = response.choices[0].message.content
         response_list[2] = score_analysis 
+
+
+        ####Store in database ####
+        #store essay and score in essays_collection in db
+        essay_document = {
+            'user_id': ObjectId(current_user.id),
+            'text': input_essay,
+            'mode': mode,
+            'score': score_analysis
+            #add date if we wanted history up to a certain point later
+        }
+        essays_collection.insert_one(essay_document)
+
         return render_template('analysis.html', response_list=response_list, text_parts = text_parts, analysis_parts = analysis_parts)
     else:
         return render_template('analysis.html', response_list=response_list, text_parts = text_parts, analysis_parts = analysis_parts)
@@ -298,7 +320,7 @@ def create_account():
         email = request.form['email']
         password = request.form['password']
         
-        #check database for existing user/email, they have to bunique
+        #check database for existing user/email, they have to be unique
         existing_user = users_collection.find_one({'username': username})
         existing_email = users_collection.find_one({'email': email})
         
