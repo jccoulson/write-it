@@ -52,7 +52,9 @@ def rankings():
 
 #generate the writing prompts, should be called once per day
 def generate_prompts():
-    response = ""
+    list_of_prompts = []
+
+    #### Generate Normal Prompt ####
     client = AzureOpenAI(
         azure_endpoint=azure_endpoint,
         api_key=api_key,
@@ -60,8 +62,12 @@ def generate_prompts():
     )
 
     #system message for gpt
-    system_message = "Generate minimum 3 sentence, maximum 4 sentence writing prompt that will help a user as a creative excersise, leave it slightly open ended. Do be specifically prompting them, just set an environment for them to build on. Don't really lead the user and don't ask them questions/give specific direction. Don't say anything meta about prompting them, just the setting. They prompt has to be a story/settings description, no meta talk, no saying words like write this or do this, etc"
-
+    system_message = """Generate minimum 3 sentence, maximum 4 sentence writing prompt that will help a user as a creative excersise, leave it slightly open ended. 
+    Do be specifically prompting them, just set an environment for them to build on. 
+    Don't really lead the user and don't ask them questions/give specific direction. 
+    Don't say anything meta about prompting them, just the setting. 
+    The prompt has to be a story/settings description, no meta talk, no saying words like write this or do this, etc"""
+   
     messages_array = [
         {"role": "system", "content": system_message},
     ]
@@ -72,27 +78,79 @@ def generate_prompts():
         messages=messages_array
     )
 
-    #response given by gpt
-    generated_text = response.choices[0].message.content
-    return generated_text
+    #add response given by gpt to list
+    list_of_prompts.append(response.choices[0].message.content)
+
+    #### Generate Creative Prompt ####
+    system_message = """Generate minimum 3 sentence, maximum 4 sentence writing prompt that will help a user as a creative excersise, leave open ended. 
+    Do be specifically prompting them, just set an environment for them to build on. 
+    Don't really lead the user and don't ask them questions/give specific direction. 
+    Don't say anything meta about prompting them, just the setting. 
+    The prompt has to be a story/settings description, no meta talk, no saying words like write this or do this, etc
+    This prompt is extremely creative/wacky/out there. 
+    We already gave them a prompt for a normal piece of writing, this is the creative prompt so make it accordingly.
+    """
+    messages_array = [
+        {"role": "system", "content": system_message},
+    ]
+
+    response = client.chat.completions.create(
+        model="gpt-35-turbo",
+        max_tokens=200,
+        messages=messages_array
+    )
+    
+    list_of_prompts.append(response.choices[0].message.content)
+
+    #### Generate Challenge Prompt ####
+    system_message = """Generate minimum 3 sentence, maximum 4 sentence writing prompt that will help a user as a creative excersise, leave open ended. 
+    This prompt's purpose is to have a syntactic/grammatic challenge of some kind.
+    An example of challenge is: do not use any verb more than once in the whole writing. The challenge should be something like this, be creative.
+    Don't really lead the user in the setting of the prompt, only in the challenge part. 
+    Don't say anything meta about prompting them besides the challenge, just the setting. 
+    The prompt has to be a story/settings description and challenge, no saying words like write this or do this, etc
+    We already gave them a prompt for a normal piece of writing and creative piece of writing, the purpose of this is to be the challenge mode prompt.
+    """
+
+    messages_array = [
+        {"role": "system", "content": system_message},
+    ]
+
+    response = client.chat.completions.create(
+        model="gpt-35-turbo",
+        max_tokens=200,
+        messages=messages_array
+    )
+    
+    list_of_prompts.append(response.choices[0].message.content)
+    return list_of_prompts
 
 #globals for prompt
 current_prompts = generate_prompts()
 last_gen_time = datetime.date.today()
 
 
-@app.route('/prompt')
+@app.route('/prompt', methods=['POST'])
 @login_required
 def prompt():
     global last_gen_time
     global current_prompts
-    print(last_gen_time)
 
     #check if its been a day since someone has last been on page to generate new prompt
     if last_gen_time < datetime.date.today():
         current_prompts = generate_prompts()
         last_gen_time = datetime.date.today()
-    return render_template('prompt.html', response_text=current_prompts)
+
+    mode = request.form['mode']
+    if mode == 'normal':
+        return render_template('prompt.html',response_text=current_prompts[0])
+    if mode == 'creative':
+        return render_template('prompt.html',response_text=current_prompts[1])
+    if mode == 'challenge':
+        return render_template('prompt.html',response_text=current_prompts[2])
+    else:
+        return redirect('/difficulty')
+   
 
 #page that uses openai to analyze the submitted essay
 @app.route('/analysis', methods=['POST'])
