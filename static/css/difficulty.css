@@ -63,7 +63,7 @@ button:hover {
 }  
 
 /* when the viewport is 1300 or less, this activates */
-@media screen and (max-width: 1900px) {
+@media screen and (max-width: 1300px) {
     .row {
         margin-left: 33.5%;
     }
