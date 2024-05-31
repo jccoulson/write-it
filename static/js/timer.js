@@ -11,9 +11,9 @@ function updateTimer() {
     if (timeLeft > 0) {
         timeLeft--;
     } else {
-        //when timer is done move to analysis page
         clearInterval(timerInterval);
-        window.location.href = '/analysis'; 
+        //when timer is done move to analysis page
+        document.getElementById('essayForm').submit();
     }
 }
 

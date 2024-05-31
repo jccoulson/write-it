@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/static/css/navbar.css"> 
     <link rel="stylesheet" href="/static/css/prompt.css"> 
     <script src="/static/js/timer.js" defer></script>
-    <title>Countdown Timer</title>
+    <title>Prompt</title>
 </head>
 <div class="topnav">
     <a href="/">Home</a>
@@ -29,7 +29,9 @@
         <div class="prompt-box">
             <p>{{response_text}}</p>
         </div>
-        <form action="/analysis" method="post">
+        <form id="essayForm" action="/analysis" method="post">
+            <!--pass difficulty to next page to store in mongo, put as hidden-->
+            <input type="hidden" name="mode" value="{{ current_mode }}">
             <div class="writing-area">
                 <textarea name="inputEssay" placeholder="Start writing here..."></textarea>
             </div>
