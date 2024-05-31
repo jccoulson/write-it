@@ -2,12 +2,17 @@ from flask import Flask, request, render_template, redirect, url_for, flash
 from openai import AzureOpenAI
 import os
 from dotenv import load_dotenv
-from pymongo import MongoClient
+from pymongo import MongoClient, ASCENDING
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import datetime
 import time
 from werkzeug.security import generate_password_hash, check_password_hash
 from bson.objectid import ObjectId
+from sklearn.metrics.pairwise import cosine_similarity
+from sentence_transformers import SentenceTransformer
+import numpy as np
+
+
 
 load_dotenv()
 
@@ -21,19 +26,24 @@ db = client['writeit_db']  #the writeit-database
 users_collection = db.users
 #collection for daily essays
 essays_collection = db.essays
+#collection for daily prompts
+prompts_collection = db.prompts
 
 #login setup
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-
 #variables for api
 api_key = os.getenv("AZURE_OAI_KEY")
 azure_endpoint = os.getenv("AZURE_OAI_ENDPOINT")
 api_version = os.getenv("AZURE_OAI_VERSION")
 
-
+client = AzureOpenAI(
+    azure_endpoint=azure_endpoint,
+    api_key=api_key,
+    api_version=api_version
+)
 
 #route for the landing page
 @app.route('/')
@@ -49,93 +59,136 @@ def difficulty():
 #route for the rankings  page
 @app.route('/rankings')
 def rankings():
+    top_scores = users_collection.find({}, {'_id': 0, 'score': 1, 'other_field': 1}).sort('score', -1).limit(10)
     return render_template('rankings.html')
 
+#pre trained sentence transformer model for generating embeddings
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
+#check similarity with existing prompts
+def is_prompt_similar(new_prompt, threshold=0.8):
+    #get all prompts in database
+    results = list(prompts_collection.find({}, {"prompt": 1, "_id": 0}))
+    
+    #if empty then return false, e.g. no need to make comparisons
+    if not results:
+        print("No prompts found in the database.")
+        return False
+    
+    new_prompt_embedding = model.encode([new_prompt])
+    
+    #get all existing prompts and from the database and embedd them
+    all_prompts = list(prompts_collection.find({}, {"prompt": 1, "_id": 0}))
+    all_prompts_text = [item["prompt"] for item in all_prompts]
+    all_embeddings = model.encode(all_prompts_text)
+    
+    #use cosine similarity between new prompt and all existing prompts
+    similarities = cosine_similarity(new_prompt_embedding, all_embeddings)
+    
+    #if similarity exceeds threshhold(0.8) then return true(it is similar)
+    max_similarity = np.max(similarities)
+    print("In is_prompt_similar - max similarity:", max_similarity)
+    print("In is_prompt_similar - similarities:", similarities)
+
+    return max_similarity >= threshold
 
 #generate the writing prompts, should be called once per day
-def generate_prompts():
+def helper_generate_prompts():
     #delete all of essays_collection, modify later to certain time period if want some history
     essays_collection.delete_many({})
 
     list_of_prompts = []
 
-    #### Generate Normal Prompt ####
-    client = AzureOpenAI(
-        azure_endpoint=azure_endpoint,
-        api_key=api_key,
-        api_version=api_version
-    )
+    #for code simplicity call for nested function
+    def generate_prompt(system_message):
+        messages_array = [
+        {"role": "system", "content": system_message},
+        ]
 
-    #system message for gpt
-    system_message = """Generate minimum 3 sentence, maximum 4 sentence writing prompt that will help a user as a creative excersise, leave it slightly open ended. 
-    Do be specifically prompting them, just set an environment for them to build on. 
-    Don't really lead the user and don't ask them questions/give specific direction. 
-    Don't say anything meta about prompting them, just the setting. 
-    The prompt has to be a story/settings description, no meta talk, no saying words like write this or do this, etc"""
+        response = client.chat.completions.create(
+        model="gpt-4",
+        max_tokens=200,
+        messages=messages_array
+        )
+        return response.choices[0].message.content
+    
+    def generate_system_message(type):
+        #create a list of all existing prompts
+        existing_prompts = list(prompts_collection.find({"type": type}, {"prompt": 1, "_id": 0}))
+        existing_prompts_text = "\nPrompt:\n".join([item["prompt"] for item in existing_prompts])
+        if type == "normal":
+            #### Generate Normal Prompt ####
+            system_message = """Generate minimum 3 sentence, maximum 4 sentence writing prompt that will help a user as a creative excersise, leave it slightly open ended. 
+            Do be specifically prompting them, just set an environment for them to build on. 
+            Don't really lead the user and don't ask them questions/give specific direction. 
+            Don't say anything meta about prompting them, just the setting. 
+            The prompt has to be a story/settings description, no meta talk, no saying words like write this or do this, etc
+
+            Make sure that the newly generated prompt is not similar to any of these prompts.
+            {existing_prompts_text}
+            """
+        elif type == "challenge":
+            #### Generate Challenge Prompt ####
+            system_message = """Generate minimum 3 sentence, maximum 4 sentence writing prompt that will help a user as a creative excersise, leave open ended. 
+            This prompt's purpose is to have a syntactic/grammatic challenge of some kind.
+            An example of challenge is: do not use any verb more than once in the whole writing. The challenge should be something like this, be creative.
+            Don't really lead the user in the setting of the prompt, only in the challenge part. 
+            Don't say anything meta about prompting them besides the challenge, just the setting. 
+            The prompt has to be a story/settings description and challenge, no saying words like write this or do this, etc
+            We already gave them a prompt for a normal piece of writing and creative piece of writing, the purpose of this is to be the challenge mode prompt.
+            
+            Make sure that the newly generated prompt is not similar to any of these prompts.
+            {existing_prompts_text}
+            """
+        else:
+            #### Generate Creative Prompt ####
+            system_message = """Generate minimum 3 sentence, maximum 4 sentence writing prompt that will help a user as a creative excersise, leave open ended. 
+            Do be specifically prompting them, just set an environment for them to build on. 
+            Don't really lead the user and don't ask them questions/give specific direction. 
+            Don't say anything meta about prompting them, just the setting. 
+            The prompt has to be a story/settings description, no meta talk, no saying words like write this or do this, etc
+            This prompt is extremely creative/wacky/out there. 
+            We already gave them a prompt for a normal piece of writing, this is the creative prompt so make it accordingly.
+            
+            Make sure that the newly generated prompt is not similar to any of these prompts.
+            {existing_prompts_text}
+            """
+        return system_message
    
-    messages_array = [
-        {"role": "system", "content": system_message},
-    ]
+    #generate system message for each type
+    normal_system_message = generate_system_message("normal")
+    challenge_system_message = generate_system_message("challenge")
+    creative_system_message = generate_system_message("creative")
 
-    response = client.chat.completions.create(
-        model="gpt-4",
-        max_tokens=200,
-        messages=messages_array
-    )
+    #creating a dictionary of prompt types with their system message stored
+    prompt_types = {"normal": normal_system_message, "creative": creative_system_message, "challenge": challenge_system_message}
 
-    #add response given by gpt to list
-    list_of_prompts.append(response.choices[0].message.content)
-
-    #### Generate Creative Prompt ####
-    system_message = """Generate minimum 3 sentence, maximum 4 sentence writing prompt that will help a user as a creative excersise, leave open ended. 
-    Do be specifically prompting them, just set an environment for them to build on. 
-    Don't really lead the user and don't ask them questions/give specific direction. 
-    Don't say anything meta about prompting them, just the setting. 
-    The prompt has to be a story/settings description, no meta talk, no saying words like write this or do this, etc
-    This prompt is extremely creative/wacky/out there. 
-    We already gave them a prompt for a normal piece of writing, this is the creative prompt so make it accordingly.
-    """
-    messages_array = [
-        {"role": "system", "content": system_message},
-    ]
-
-    response = client.chat.completions.create(
-        model="gpt-4",
-        max_tokens=200,
-        messages=messages_array
-    )
+    #if prompt unique, then store and move on to next prompt type, if not unique, keep re-generating with calling for is_prompt_unique func
+    for prompt_type, system_message in prompt_types.items():
+        new_prompt = generate_prompt(system_message)
+        if(is_prompt_similar(new_prompt)):
+            new_prompt = generate_prompt(system_message)
+            list_of_prompts.append({"type": prompt_type, "prompt": new_prompt})
+        list_of_prompts.append({"type": prompt_type, "prompt": new_prompt})
     
-    list_of_prompts.append(response.choices[0].message.content)
+    #storing prompts in database
+    for prompt in list_of_prompts:
+        prompts_collection.insert_one({
+            "type": prompt["type"],
+            "prompt": prompt["prompt"],
+            "date": datetime.datetime.now()
+        })
 
-    #### Generate Challenge Prompt ####
-    system_message = """Generate minimum 3 sentence, maximum 4 sentence writing prompt that will help a user as a creative excersise, leave open ended. 
-    This prompt's purpose is to have a syntactic/grammatic challenge of some kind.
-    An example of challenge is: do not use any verb more than once in the whole writing. The challenge should be something like this, be creative.
-    Don't really lead the user in the setting of the prompt, only in the challenge part. 
-    Don't say anything meta about prompting them besides the challenge, just the setting. 
-    The prompt has to be a story/settings description and challenge, no saying words like write this or do this, etc
-    We already gave them a prompt for a normal piece of writing and creative piece of writing, the purpose of this is to be the challenge mode prompt.
-    """
-
-    messages_array = [
-        {"role": "system", "content": system_message},
-    ]
-
-    response = client.chat.completions.create(
-        model="gpt-4",
-        max_tokens=200,
-        messages=messages_array
-    )
-    
-    list_of_prompts.append(response.choices[0].message.content)
     return list_of_prompts
 
+####################### COMMENT OUT WHEN DEVELOPING TO PRESERVE TOKENS #######################
 #globals for prompt
-current_prompts = generate_prompts()
+#current_prompt is a list of dictionaries with key:["type"] key:["prompt"]
+current_prompts = helper_generate_prompts()
 last_gen_time = datetime.date.today()
 
 
-@app.route('/prompt', methods=['POST'])
+@app.route('/prompt', methods=['POST','GET'])
 @login_required
 def prompt():
     global last_gen_time
@@ -143,16 +196,18 @@ def prompt():
 
     #check if its been a day since someone has last been on page to generate new prompt
     if last_gen_time < datetime.date.today():
-        current_prompts = generate_prompts()
+        current_prompts = helper_generate_prompts()
         last_gen_time = datetime.date.today()
-
-    mode = request.form['mode']
-    if mode == 'normal':
-        return render_template('prompt.html',response_text=current_prompts[0], current_mode = mode) #pass difficulty to prompt page for later storage
-    if mode == 'creative':
-        return render_template('prompt.html',response_text=current_prompts[1], current_mode = mode)
-    if mode == 'challenge':
-        return render_template('prompt.html',response_text=current_prompts[2], current_mode = mode)
+    
+    ### post check for development ###
+    if request.method == 'POST':
+        mode = request.form['mode']
+        if mode == 'normal':
+            return render_template('prompt.html',response_text=current_prompts[0]["prompt"], current_mode = mode) #pass difficulty to prompt page for later storage
+        elif mode == 'creative':
+            return render_template('prompt.html',response_text=current_prompts[1]["prompt"], current_mode = mode)
+        elif mode == 'challenge':
+            return render_template('prompt.html',response_text=current_prompts[2]["prompt"], current_mode = mode)
     else:
         return redirect('/difficulty')
    
@@ -205,7 +260,6 @@ def analysis():
 
         #add to list to be displayed in html
         response_list[1] = text_analysis
-        time.sleep(5.5)
 
        
         #####QUERY 2#####
@@ -237,10 +291,9 @@ def analysis():
         #split on the special character told to gpt
         parts = isolated_analysis.split('|||')
 
-        text_parts = [part.strip() for part in parts[::2]]  #extract the text
-        analysis_parts = [part.strip() for part in parts[1::2]]  #extract the analysis
+        text_parts = [part.strip() for part in parts[::2]]  #extract the text every 2nd element from beginning
+        analysis_parts = [part.strip() for part in parts[1::2]]  #extract the analysis every 2nd element from 1st element
    
-        time.sleep(5.5)
 
         #####QUERY 3#####
         #get numerical score
@@ -254,7 +307,6 @@ def analysis():
         )
         score_analysis = response.choices[0].message.content
         response_list[2] = score_analysis 
-
 
         ####Store in database ####
         #store essay and score in essays_collection in db
@@ -280,7 +332,7 @@ class User(UserMixin):
 #find the user from the database
 @login_manager.user_loader #tells flask to use this function for user retrieval
 def load_user(user_id):
-    user = users_collection.find_one({"_id": ObjectId(user_id)})  # need to use ObjectID or breaks
+    user = users_collection.find_one({"_id": ObjectId(user_id)})  #need to use ObjectID or breaks
     if user:
         return User(username=user['username'], id=user['_id'])
     return None
