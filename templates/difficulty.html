@@ -30,22 +30,25 @@
         <div class="column">
             <div class="container normal_container">
                 <h2>Normal</h2>
-                <button type="button" class="normal_prompt_button">Write-It</button>
-
+                <form action="/prompt" method="POST">
+                    <button type="submit" name="mode" value="normal" class="normal_prompt_button">Write-It</button>
+                </form>
             </div>   
         </div>  
         <div class="column">
             <div class="container challenge_container">
                 <h2>Challenge</h2>
-                <button type="button" class="challenge_prompt_button">Write-It</button>
-
+                <form action="/prompt" method="POST">
+                    <button type="submit" name="mode" value="challenge" class="challenge_prompt_button">Write-It</button>
+                </form>
             </div>
         </div>
         <div class="column">
             <div class="container creative_container">
                 <h2>Creative</h2>
-                <button type="button" class="creative_prompt_button">Write-It</button>
-
+                <form action="/prompt" method="POST">
+                    <button type="submit" name="mode" value="creative" class="creative_prompt_button">Write-It</button>
+                </form>
             </div>
         </div>
     </div>
