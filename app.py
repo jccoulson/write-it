@@ -171,20 +171,22 @@ def helper_generate_prompts():
             list_of_prompts.append({"type": prompt_type, "prompt": new_prompt})
         list_of_prompts.append({"type": prompt_type, "prompt": new_prompt})
     
-    #storing prompts in database
+
+    prompts_collection.update_many({}, {"$set": {"active": False}})  #set all old prompts to not active
     for prompt in list_of_prompts:
         prompts_collection.insert_one({
             "type": prompt["type"],
             "prompt": prompt["prompt"],
-            "date": datetime.datetime.now()
+            "date": datetime.datetime.now(),
+            "active": True
         })
 
     return list_of_prompts
 
-####################### COMMENT OUT WHEN DEVELOPING TO PRESERVE TOKENS #######################
+####################### COMMENT OUT current_prompts WHEN DEVELOPING TO PRESERVE TOKENS ########################
 #globals for prompt
 #current_prompt is a list of dictionaries with key:["type"] key:["prompt"]
-current_prompts = helper_generate_prompts()
+#current_prompts = helper_generate_prompts()
 last_gen_time = datetime.date.today()
 
 
