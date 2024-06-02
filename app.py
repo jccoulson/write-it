@@ -171,17 +171,19 @@ def helper_generate_prompts():
             list_of_prompts.append({"type": prompt_type, "prompt": new_prompt})
         list_of_prompts.append({"type": prompt_type, "prompt": new_prompt})
     
-    #storing prompts in database
+
+    prompts_collection.update_many({}, {"$set": {"active": False}})  #set all old prompts to not active
     for prompt in list_of_prompts:
         prompts_collection.insert_one({
             "type": prompt["type"],
             "prompt": prompt["prompt"],
-            "date": datetime.datetime.now()
+            "date": datetime.datetime.now(),
+            "active": True
         })
 
     return list_of_prompts
 
-####################### COMMENT OUT WHEN DEVELOPING TO PRESERVE TOKENS #######################
+####################### COMMENT OUT current_prompts WHEN DEVELOPING TO PRESERVE TOKENS ########################
 #globals for prompt
 #current_prompt is a list of dictionaries with key:["type"] key:["prompt"]
 current_prompts = helper_generate_prompts()
@@ -220,6 +222,8 @@ def analysis():
     response_list = [""]*3
     text_parts = [""]*2
     analysis_parts = [""]*2
+
+
     if request.method == 'POST':
         client = AzureOpenAI(
             azure_endpoint=azure_endpoint,
@@ -230,15 +234,23 @@ def analysis():
         input_essay = request.form['inputEssay']
         mode = request.form['mode']
 
-
-        
-
         #will display back their essay on page
         response_list[0] = input_essay
 
+        current_prompt = prompts_collection.find_one(
+            {"active": True, "type": mode},  
+            {"type": 1, "prompt": 1, "_id": 0}  
+        )
+        
+
         #####QUERY 1#####
+        #get current prompt
+  
         #system message for gpt
-        system_message = "The user has written this writing as creative writing excersise. Write a paragraph giving your feedback to the writer. Be honest, if the writing is very poor say so, but if it very good say that too. If it is unintelligble do not be afraid to say so."
+        system_message = f"""The user has written this writing as creative writing excersise. Write a paragraph giving your feedback to the writer. Be honest, if the writing is very poor say so, but if it very good say that too. If it is unintelligble do not be afraid to say so. Following the prompt I will show is very important to your analysis, if it does not follow the prompt mention that and make it a big part of your analysis.
+        The writing was based on the following prompt, so keept that in mind for all of your feedback you will give:
+        {current_prompt['prompt']}
+        """
 
         messages_array = [
             {"role": "system", "content": system_message},
@@ -297,11 +309,11 @@ def analysis():
 
         #####QUERY 3#####
         #get numerical score
-        system_message3 = "Now write a numerical score from 0-1000 for the original writing. Here is the rubric: 600 points for how well you think it was written, 200 points for length, and 200 points for your choosing for these last 200 points make it very difficult to get all 200 but it is possible but has to be a perfect piece of writing in your mind. The response is only the number, nothing else."
+        system_message3 = "Now write a numerical score from 0-1000 for the original writing. Here is the rubric: 600 points for how well you think it was written and followed the prompt(if it didn't follow the prompt at all and seems irrelevant don't give it any of the 600 points), 200 points for length, and 200 points for your choosing for these last 200 points make it very difficult to get all 200 but it is possible but has to be a perfect piece of writing in your mind. The response is only the number, nothing else."
         messages_array.append({"role": "system", "content": system_message3})
 
         response = client.chat.completions.create(
-            model="gpt-35-turbo",
+            model="gpt-4",
             max_tokens=200,
             messages=messages_array
         )
