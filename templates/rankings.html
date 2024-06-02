@@ -5,241 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/navbar.css"> 
     <link rel="stylesheet" href="/static/css/rankings.css"> 
-
     <title>Rankings</title>
 </head>
-<div class="topnav">
-    <a href="/">Home</a>
-    <a href="/difficulty">Difficulty</a>
-    <a href="/prompt">Prompt</a>
-    <a href="/rankings" class = "active">Rank Ladder</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
-    {% if current_user.is_authenticated %}
-        <a href="{{ url_for('logout') }}" class="auth-link">Logout</a>
-    {% else %}
-        <a href="{{ url_for('login') }}" class="auth-link">Login</a>
-        <a href="{{ url_for('create_account') }}" class="auth-link">Sign Up</a>
-    {% endif %}
-</div>
+<body>
+    <div class="topnav">
+        <a href="/">Home</a>
+        <a href="/difficulty">Difficulty</a>
+        <a href="/prompt">Prompt</a>
+        <a href="/rankings" class="active">Rank Ladder</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('logout') }}" class="auth-link">Logout</a>
+        {% else %}
+            <a href="{{ url_for('login') }}" class="auth-link">Login</a>
+            <a href="{{ url_for('create_account') }}" class="auth-link">Sign Up</a>
+        {% endif %}
+    </div>
 
-</body>
     <h1 class="leaderboard">Leaderboard</h1>
     <div class="row">
+        <!-- normal table -->
         <div class="column">
+            <h>Normal Rankings</h>
             <table class="normal_ranking">
                 <tr>
-                  <th class="rank">Rank</th>
-                  <th class ="name">Name</th>
-                  <th class="score">Score</th>
-                  <th class ="article">Read Article</th>
+                    <th class="rank">Rank</th>
+                    <th class="name">Name</th>
+                    <th class="score">Score</th>
+                    <th class="article">Read Article</th>
                 </tr>
-                <tr class="normal_first_place">
-                    <td>1</td>
-                    <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                    <td>889</td>
-                    <td><button type="button" class="normal_first_button">Read-It</button></td>
-                </tr>
-                <tr class="normal_second_place">
-                    <td>2</td>
-                    <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                    <td>854</td>
-                    <td><button type="button" class="normal_second_button">Read-It</button></td>
-                </tr>
-                <tr class="normal_third_place">
-                    <td>3</td>
-                    <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                    <td>824</td>
-                    <td><button type="button" class="normal_third_button">Read-It</button></td>
-                </tr>
-                <tr class="normal_fourth_place">
-                    <td>4</td>
-                    <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                    <td>750</td>
-                    <td><button type="button" class="normal_fourth_button">Read-It</button></td>
-                </tr>
-                <tr class="normal_fifth_place">
-                    <td>5</td>
-                    <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                    <td>662</td>
-                    <td><button type="button" class="normal_fifth_button">Read-It</button></td>
-                </tr>
-                <tr class="normal_sixth_place">
-                    <td>6</td>
-                    <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                    <td>567</td>
-                    <td><button type="button" class="normal_sixth_button">Read-It</button></td>
-                </tr>
-                <tr class="normal_seventh_place">
-                    <td>7</td>
-                    <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                    <td>567</td>
-                    <td><button type="button" class="normal_seventh_button">Read-It</button></td>
-                </tr>
-                <tr class="normal_eighth_place">
-                    <td>8</td>
-                    <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                    <td>567</td>
-                    <td><button type="button" class="normal_eighth_button">Read-It</button></td>
-                </tr>
-                <tr class="normal_nineth_place">
-                    <td>9</td>
-                    <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                    <td>567</td>
-                    <td><button type="button" class="normal_nineth_button">Read-It</button></td>
-                </tr>
-                <tr class="normal_tenth_place">
-                    <td>10</td>
-                    <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                    <td>567</td>
-                    <td><button type="button" class="normal_tenth_button">Read-It</button></td>
-                </tr>
-              </table> 
+                {% for user in top_normal %}
+                <tr class="normal_place">
+                    <td>{{ loop.index }}</td>
+                    <td><p>{{ user[1]}}</p></td>
+                    <td>{{ user[0]}}</td>
+                    <td>
+                        <form action="/read" method="POST">
+                            <input type="hidden" name="mode" value="{{user[3]}}">
+                            <input type="hidden" name="user_id" value="{{user[2]}}">
+                            <button type="submit">Read-It</button>
+                        </form>
+                    </td>
+                {% endfor %}
+            </table> 
         </div>
 
-   
-    <div class="column">
-      <table class="challenge_ranking">
-        <tr>
-          <th class="rank">Rank</th>
-          <th class ="name">Name</th>
-          <th class="score">Score</th>
-          <th class ="article">Read Article</th>
-        </tr>
-        <tr class="challenge_first_place">
-            <td>1</td>
-            <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p></td>
-            <td>889</td>
-            <td><button type="button" class="challenge_first_button">Read-It</button></td>
-        </tr>
-        <tr class="challenge_second_place">
-            <td>2</td>
-            <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-            <td>854</td>
-            <td><button type="button" class="challenge_second_button">Read-It</button></td>
-        </tr>
-        <tr class="challenge_third_place">
-            <td>3</td>
-            <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-            <td>824</td>
-            <td><button type="button" class="challenge_third_button">Read-It</button></td>
-        </tr>
-        <tr class="challenge_fourth_place">
-            <td>4</td>
-            <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-            <td>750</td>
-            <td><button type="button" class="challenge_fourth_button">Read-It</button></td>
-        </tr>
-        <tr class="challenge_fifth_place">
-            <td>5</td>
-            <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-            <td>662</td>
-            <td><button type="button" class="challenge_fifth_button">Read-It</button></td>
-        </tr>
-        <tr class="challenge_sixth_place">
-            <td>6</td>
-            <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-            <td>567</td>
-            <td><button type="button" class="challenge_sixth_button">Read-It</button></td>
-        </tr>
-        <tr class="challenge_seventh_place">
-            <td>7</td>
-            <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-            <td>567</td>
-            <td><button type="button" class="challenge_seventh_button">Read-It</button></td>
-        </tr>
-        <tr class="challenge_eighth_place">
-            <td>8</td>
-            <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-            <td>567</td>
-            <td><button type="button" class="challenge_eighth_button">Read-It</button></td>
-        </tr>
-        <tr class="challenge_nineth_place">
-            <td>9</td>
-            <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-            <td>567</td>
-            <td><button type="button" class="challenge_nineth_button">Read-It</button></td>
-        </tr>
-        <tr class="challenge_tenth_place">
-            <td>10</td>
-            <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-            <td>567</td>
-            <td><button type="button" class="challenge_tenth_button">Read-It</button></td>
-        </tr>
-      </table> 
-    </div>
-
+        <!-- challenge table -->
         <div class="column">
-        <table class="creative_ranking">
-            <tr>
-            <th class="rank">Rank</th>
-            <th class ="name">Name</th>
-            <th class="score">Score</th>
-            <th class ="article">Read Article</th>
-            </tr>
-            <tr class="creative_first_place">
-                <td>1</td>
-                <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                <td>889</td>
-                <td><button type="button" class="creative_first_button">Read-It</button></td>
-            </tr>
-            <tr class="creative_second_place">
-                <td>2</td>
-                <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                <td>854</td>
-                <td><button type="button" class="creative_second_button">Read-It</button></td>
-            </tr>
-            <tr class="creative_third_place">
-                <td>3</td>
-                <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                <td>824</td>
-                <td><button type="button" class="creative_third_button">Read-It</button></td>
-            </tr>
-            <tr class="creative_fourth_place">
-                <td>4</td>
-                <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                <td>750</td>
-                <td><button type="button" class="creative_fourth_button">Read-It</button></td>
-            </tr>
-            <tr class="creative_fifth_place">
-                <td>5</td>
-                <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                <td>662</td>
-                <td><button type="button" class="creative_fifth_button">Read-It</button></td>
-            </tr>
-            <tr class="creative_sixth_place">
-                <td>6</td>
-                <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                <td>567</td>
-                <td><button type="button" class="creative_sixth_button">Read-It</button></td>
-            </tr>
-            <tr class="creative_seventh_place">
-                <td>7</td>
-                <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                <td>567</td>
-                <td><button type="button" class="creative_seventh_button">Read-It</button></td>
-            </tr>
-            <tr class="creative_eighth_place">
-                <td>8</td>
-                <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                <td>567</td>
-                <td><button type="button" class="creative_eighth_button">Read-It</button></td>
-            </tr>
-            <tr class="creative_nineth_place">
-                <td>9</td>
-                <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                <td>567</td>
-                <td><button type="button" class="creative_nineth_button">Read-It</button></td>
-            </tr>
-            <tr class="creative_tenth_place">
-                <td>10</td>
-                <td><p>Joeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee</p> </td>
-                <td>567</td>
-                <td><button type="button" class="creative_tenth_button">Read-It</button></td>
-            </tr>
-        </table> 
+            <h>Challenge Rankings</h>
+            <table class="challenge_ranking">
+                <tr>
+                    <th class="rank">Rank</th>
+                    <th class="name">Name</th>
+                    <th class="score">Score</th>
+                    <th class="article">Read Article</th>
+                </tr>
+                {% for user in top_challenge %}
+                <tr class="challenge_place">
+                    <td>{{ loop.index }}</td>
+                    <td><p>{{ user[1] }}</p></td>
+                    <td>{{ user[0] }}</td>
+                    <td>
+                        <form action="/read" method="POST">
+                            <input type="hidden" name="mode" value="{{user[3]}}">
+                            <input type="hidden" name="user_id" value="{{user[2]}}">
+                            <button type="submit">Read-It</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table> 
+        </div>
+
+        <!-- creative table -->
+        <div class="column">
+            <h>Creative Rankings</h>
+            <table class="creative_ranking">
+                <tr>
+                    <th class="rank">Rank</th>
+                    <th class="name">Name</th>
+                    <th class="score">Score</th>
+                    <th class="article">Read Article</th>
+                </tr>
+                {% for user in top_creative %}
+                <tr class="creative_place">
+                    <td>{{ loop.index }}</td>
+                    <td><p>{{ user[1] }}</p></td>
+                    <td>{{ user[0] }}</td>
+                    <td>
+                        <form action="/read" method="POST">
+                            <input type="hidden" name="mode" value="{{user[3]}}">
+                            <input type="hidden" name="user_id" value="{{user[2]}}">
+                            <button type="submit">Read-It</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table> 
         </div>
     </div>
-    
 </body>
 </html>

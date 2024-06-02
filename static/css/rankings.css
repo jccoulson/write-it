@@ -35,7 +35,17 @@
     text-align: center;
     padding: 8px;
   }
-
+  h{
+    max-width: 70%;
+    font-size: 150%;
+    font-weight: bold;
+    margin-bottom: 1%;
+  }
+  .leaderboard{
+    font-size: 240%;
+    font-weight: bold;
+    margin-top:1%;
+  }
   /* on html file, changed the names to <p> type to enable the overflow with ellipsis */
   p{
     max-width: 100%;

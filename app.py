@@ -56,11 +56,48 @@ def landing_page():
 def difficulty():
     return render_template('difficulty.html')
 
+#route for the read user's prompt from leaderboard
+@app.route('/read',methods=['POST'])
+def read():
+    if request.method == 'POST':
+        mode = request.form['mode']
+        user_id = request.form['user_id']
+        #grab the text from essay collection based on user_id and mode
+        essay=essays_collection.find_one({'user_id':ObjectId(user_id),'mode':mode}, {'text':1})
+        #send the text only
+        return render_template('read.html', essay=essay['text'])
+    else:
+        return redirect('/rankings')
+
 #route for the rankings  page
 @app.route('/rankings')
 def rankings():
-    top_scores = users_collection.find({}, {'_id': 0, 'score': 1, 'other_field': 1}).sort('score', -1).limit(10)
-    return render_template('rankings.html')
+    #get top 10 scores, create a list that holds highest to lowest(0th element highest score)
+    top_normal= list(essays_collection.find({'mode': 'normal'}, {'_id': 0, 'user_id': 1, 'score': 1, 'text': 1,"mode":1}).sort('score', -1).limit(10))
+    top_challenge = list(essays_collection.find({'mode': 'challenge'}, {'_id': 0, 'user_id': 1, 'score': 1, 'text': 1,"mode":1}).sort('score', -1).limit(10))
+    top_creative = list(essays_collection.find({'mode': 'creative'}, {'_id': 0, 'user_id': 1, 'score': 1, 'text': 1,"mode":1}).sort('score', -1).limit(10))
+    
+    #nested function for repetition and readability
+    def get_name_score(top_list):
+        score_list = []
+        name_list = []
+        userid_list = []
+        mode_list = []
+        #grab scores and user_id
+        for essay in top_list:
+            user_id= essay['user_id'] 
+            top_name=users_collection.find_one({'_id':ObjectId(user_id)}, {"username":1,"mode":1})
+            name_list.append(top_name['username'])
+            score_list.append(essay['score'])
+            userid_list.append(essay['user_id'])
+            mode_list.append(essay['mode'])
+        return zip(score_list,name_list,userid_list,mode_list)
+    
+    normal_zip = get_name_score(top_normal)
+    challenge_zip = get_name_score(top_challenge)
+    creative_zip = get_name_score(top_creative)
+
+    return render_template('rankings.html', top_normal=normal_zip,top_challenge=challenge_zip, top_creative=creative_zip)
 
 #pre trained sentence transformer model for generating embeddings
 model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -184,7 +221,7 @@ def helper_generate_prompts():
 ####################### COMMENT OUT WHEN DEVELOPING TO PRESERVE TOKENS #######################
 #globals for prompt
 #current_prompt is a list of dictionaries with key:["type"] key:["prompt"]
-current_prompts = helper_generate_prompts()
+# current_prompts = helper_generate_prompts()
 last_gen_time = datetime.date.today()
 
 
