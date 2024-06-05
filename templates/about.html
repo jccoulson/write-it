@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/navbar.css"> 
+    <link rel="stylesheet" href="/static/css/about.css"> 
+    <title>About Us</title>
+</head>
+<body>
+    <div class="topnav">
+        <a href="/">Home</a>
+        <a href="/difficulty">Difficulty</a>
+        <a href="/rankings">Rank Ladder</a>
+        <a href="/about" class="active">About</a>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('logout') }}" class="auth-link">Logout</a>
+        {% else %}
+            <a href="{{ url_for('login') }}" class="auth-link">Login</a>
+            <a href="{{ url_for('create_account') }}" class="auth-link">Sign Up</a>
+        {% endif %}
+    </div>
+    <h1 class="mode">About Us</h1>
+    <div class="container">
+        <p>Welcome to WriteIt, where writing becomes a fun and engaging journey with AI-powered analysis and scoring. Our platform offers a variety of writing prompts that spark creativity, from everyday exercises to syntactic and grammatical challenges. With advanced AI, we evaluate your writing and provide detailed feedback and scores to help you improve. Join our vibrant community, participate in daily writing challenges, and climb the rankings to see how you compare with other writers. Whether you're an aspiring novelist, a seasoned writer, or just enjoy occasional writing exercises, WriteIt is the perfect place to sharpen your skills and have fun with words. Dive into our prompts, get instant AI feedback, and watch your writing flourish.</p>
+    </div>  
+    <img class="cat_book" src="/static/images/cat_book.jpg" alt="Image of cat with book"> 
+</body>
+</html>
