@@ -1,5 +1,5 @@
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: "Poppins", sans-serif;
     margin: 0; /* need to add margin:0 to ensure navbar aligns properly */
     padding: 0;
     align-items: center;
@@ -22,22 +22,32 @@ body {
 
 
 /* big bg vertcal container */
-.bg_container{
-    margin:0;
-    position:absolute;
-    top:20%;
+.bg_container {
+    position: absolute;  
+    margin: 0;          
+    top: 22%;           
     text-align: center;
     padding: 10px;
-    border-radius: 8px;
+    border-radius: 15px;
     background: white;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    width: 20%;
-    height: 60vh;
-    overflow:hidden;
-    margin-left: 65%;
-    z-index: 0; 
-    min-width: 250px;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.4);
+    width: 20%;         
+    height: 60vh;     
+    left: 65%;           
+    z-index: 0;
+    min-width: 400px;
     min-height: 500px;
+}
+
+
+.bg_img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px;
 }
 
 /* cubical foreground larger container*/
@@ -48,15 +58,15 @@ body {
     top: 27%; /* adjust from the top to bottom */
     position: absolute;
     border-radius: 8px;
-    background: #DAE9DB;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background: #fffaf0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     width: 10vw;
     height: 17vh;
     overflow:hidden;
     margin-left: 58%;
     padding-bottom: 0;
     z-index: 1;
-    min-width: 150px;
+    min-width: 200px;
     min-height: 150px;
 }
 
@@ -68,15 +78,15 @@ body {
     top: 50%; /* height from top */
     position: absolute;
     border-radius: 8px;
-    background: #DAE9DB;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background: #fffaf0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     width: 8vw;
     height: 15vh;
     overflow:auto;
     margin-left: 83%; 
     padding-bottom: 0;
     z-index: 1;
-    min-width: 100px;
+    min-width: 175px;
     min-height: 100px;
 }
 
@@ -88,15 +98,15 @@ body {
     top: 78%; /* height from top */
     position: absolute;
     border-radius: 8px;
-    background: #DAE9DB;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background: #fffaf0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     width: 5vw;
     height: 9vh;
     margin-left: 70%; /* align to the left */
     padding-bottom: 0px;
     z-index: 1;
     overflow:clip;
-    min-width: 70px;
+    min-width: 120px;
     min-height: 70px;
 }
 
@@ -135,6 +145,8 @@ body {
     background-color: black;
     color: white;
     border-radius: 5px;
+    font-family: "Poppins", sans-serif;
+    font-weight:bold;
     padding:10px;
     font-size: 13px;
     border: none;
@@ -143,4 +155,40 @@ body {
 
 button:hover{
     opacity: 70%;
+}
+
+
+p {
+    font-weight: bold;
+    font-size: 12px;
+    color:grey;
+    margin:0;
+}
+
+.paper_img {
+    width: 60%;
+}
+
+.emoji {
+    width:20%;
+}
+.leaderboard_img {
+    margin:0;
+    right: 4%;
+    width:100%;
+}
+
+.writer_img {
+    width: 70%;
+}
+
+.write_text{
+    font-size: 14px;
+ 
+}
+
+@media (max-width: 1200px) {
+    .bg_container, .large_container, .medium_container, .small_container {
+        display: none;
+    }
 }

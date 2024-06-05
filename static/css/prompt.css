@@ -1,5 +1,5 @@
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: "Poppins", sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
@@ -33,7 +33,7 @@ body {
 .prompt-box p {
     color: #2a2a2a; 
     font-size: 1.1rem; 
-    font-family: 'Georgia', serif;  
+    font-family: "Poppins", sans-serif; 
     line-height: 1.6;  
     text-align: justify;  
     margin: 0 0 15px 0; 
