@@ -1,73 +1,198 @@
-/* see code referenced from rankings.css */
-*{
+* {
     box-sizing: border-box;
 }
   
 .row {
-    margin-left:9.5%;
-    margin-top: 5%;
+    display: flex;
+    flex-wrap: wrap; /*columns can wrap on smaller screens*/
+    justify-content: center; 
+    margin-top: 2%;
+    margin-left: 0; 
 }
     
 .column {
-    float: left;
     width: 33%;
     padding: 5px;
 }
 
-.row::after {
-    content: "";
-    clear: both;
-    display: table;
-}
-
 body {
     text-align: center;
-    margin:0;
+    margin: 0;
     height: 100vh;
     width: 100vw;
     background-color: #E7ECFF;
 }
 
-/* parent class changes for the 3-gametype containers */
 .container {
-    padding: 10px;
+    padding: 10px 0;
     border-radius: 8px;
-    background: white;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    background-color: #DDE4FF;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.1);
     width: 75%;
     height: 70vh;
-
+    margin: auto; 
 }
 
-/* generally we want the same properties on all of the choices for consistency */
 .challenge_prompt_button,
 .creative_prompt_button,
-.normal_prompt_button{
-    top: 0%;
-    margin-left: 0%; 
-    height: 10%;
-    width: 30%;
+.normal_prompt_button {
+    margin-top: 1%;
+    height: auto; 
+    width: 25%; 
     background-color: black;
     color: white;
     border-radius: 5px;
-    font-size: 15px;
-    padding:5px;
+    font-size: 20px;
+    padding: 1rem; 
     border: none;
     cursor: pointer;
-    z-index: 1;
+    box-sizing: border-box; 
 }
 
 button:hover {
     background-color: rgb(231, 231, 231);
     color: black;
-}  
+}
 
-/* when the viewport is 1300 or less, this activates */
+button:focus {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+
 @media screen and (max-width: 1300px) {
-    .row {
-        margin-left: 33.5%;
-    }
     .column {
-        width: 65%;
+        width: 100%;
+    }
+    .challenge_prompt_button,
+    .creative_prompt_button,
+    .normal_prompt_button {
+        padding: 10px; 
     }
 }
+
+.info_block {
+    padding: 20px;
+    background-color: #f0f0f0;
+    width: 98%;
+    border-radius: 5px;
+    margin: 10px auto; 
+    font-family: Georgia, serif;
+}
+
+h1 {
+    font-family: Georgia, serif;
+    font-weight: 700; 
+    font-size: 36px;
+}
+
+h3 {
+    font-family: Georgia, serif;
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+    width: 35%; 
+    margin: 0 auto;
+    padding: 10px;
+    border-radius: 15px;
+    background-color: #DDE4FF;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+img {
+    width: 30%;
+}
+
+.ifb1 {
+    background-color: #F0F8FF;
+}
+
+.ifb1 p {
+    padding: 17px 0;
+}
+
+.ifb2 {
+    background-color: #CFD8FF;
+}
+
+.ifb3 {
+    background-color: #F0F8FF;
+}
+
+.rules-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
+}
+
+.circle_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100px;
+}
+
+.circle {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #666;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.ifb3 p {
+    text-align: center;
+    margin-top: 0;
+    font-size: 14px;
+}
+
+.descriptor-container {
+    position:relative;
+    display: flex;
+}
+
+.choose_mode {
+    font-family: Georgia, serif;
+    font-weight: 700; 
+    font-size: 50px;
+}
+
+.fire_emoji {
+    position: absolute;/*absolute in outer relative container lets it stay on paper iamge*/
+    width: 8%; 
+    height: auto; 
+    right: -3%;   
+    bottom: 80%; 
+    z-index: 2;   
+}
+
+.paper_writing {
+    position: relative; 
+    width: 20%;
+    z-index: 1; /*z index 1 so emojis go on top*/
+}
+
+.brain_emoji {
+    position: absolute;
+    width: 8%;  
+    height: auto; 
+    right: -3%;   
+    bottom: 80%;  
+    z-index: 2;   
+}
+
+.pencil_emoji {
+    position: absolute;
+    width: 8%; 
+    height: auto; 
+    right: -3%;   
+    bottom: 80%;  
+    z-index: 2;   
+}
+
