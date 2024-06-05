@@ -1,64 +1,337 @@
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.6;
+    font-family: "Poppins", sans-serif;
     margin: 0;
-    padding: 0;
-    background: #f9f9f9;
-    color: #333;
-}
-
-.container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-}
-
-/*essay analysis part*/
-.header {
-    background: #94ec9a;
-    color: white;
-    padding: 10px 20px;
+    height: 100vh;
+    width: 100vw;
+    background-color: #D2E0FB;
+    justify-content: center;
+    align-items: center;
     text-align: center;
+}
+* {
+    box-sizing: border-box;
+}
+  
+.row {
+    margin-top: 5%;
+}
+    
+.column {
+    float: left;
+    width: 33%;
+    padding: 5px;
+}
+
+.row::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+
+h2 {
     border-radius: 8px;
+    background-color: #D2E0FB;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+    color:#007bff;
 }
 
-.main-content {
-    display: grid;
-    grid-template-columns: 3fr 2fr;
-    gap: 20px;
+.main_title_container {
+    text-align: center;
 }
-
-.text-analysis, .additional-info {
-    background: white;
-    padding: 20px;
+.analysis_title {
+    margin:0;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width:25%;
+    background-color: #fffaf0;
+    font-weight: bold;
+    font-size: 300%;
+    min-width: 400px;
+    overflow:auto;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-section {
-    margin-bottom: 20px;
+.main_container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 200%;
 }
 
-section h2 {
-    color: #94ec9a;
+.highlights_and_moments,
+.analysis_container {
+    border-radius: 8px;
+    background-color: #8EACCD;
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
+    margin: 10px;
+    min-width: 500px;
+    min-height: 300px;
+    overflow: hidden;
+}
+
+
+.analysis_container {
+    top: 20%;
+    height: 60%;
+    width: 60%;
+}
+
+.highlights_and_moments {
+    height: 160%;
+    width: 75%;
+}
+
+.feedback_container {
+    text-align: left;
+    position: relative;
+    margin-top: 0;
+    top: -10%;
+    border-radius: 8px;
+    height: 80%;
+    width: 70%;
+    overflow: auto;
+}
+.feedback_title {
+    background-color: #fffaf0;
+    font-size: 200%;
+    position: relative;
+    width: 20%;
+    min-width: 200px;
+    top: -10%;
+    left: 25%;
+    text-align: center;
+    color:#007bff;
+}
+
+.img_score {
+    position: relative;
+    width: 100%;
+    height: 50%;
+}
+.stars_img {
+    position: relative;
+    margin-top: 0;
+    top: -30%;
+    width: 40%;
+}
+.score_and_numeric {
+    box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    position: relative;
+    margin-left: auto;
+    height: 12%;
+    width: 30%;
+    z-index: 0;
+    background-color: #fffaf0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.numeric_score,
+.score {
+    font-weight: bold;
+    font-size:210%;
+    color: #007bff;
+    margin: 0 5px;
+}
+.img_illustration_analysis {
+    position: relative;
+    width: 30%;
+    height: 50%;
+    left: 70%;
+    top: -90%;
+    bottom: 0%;
+}
+.pencil_paper {
+    height: 70%;
+    width: 65%;
+    max-width: 200px;
+    min-width: 175px;
+}
+.certificate,
+.clipboard {
+    height: 80%;
+    width: 63%;
+}
+
+.highlights_container_1,
+.highlights_container_2,
+.moments_container_1,
+.moments_container_2 {
+    position: absolute;
+    height: 35%;
+    width: 35%;
+    border-radius: 8px;
+    overflow: auto;
+}
+
+.img_illustration_moments,
+.img_illustration_highlights {
+    position: relative;
+    height: 35%;
+    width: 25%;
+    border-radius: 8px;
+    min-width: 450px;
+    min-height: 350px;
+    max-width: 450px;
+    max-width: 400px;
+    overflow: clip;
+}
+
+
+.moments_title,
+.highlights_title,
+.Grammar_key_moments_title {
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
+    background-color: #fffaf0;
+    text-align: center;
+    font-size: 170%;
+    position: static;
+    border-radius: 8px;
+    width: 18%;
+    min-width: 200px;
+}
+
+.Grammar_key_moments_title {
+    position:relative;
+    font-size: 250%;
+    width: 35%;
+    left:35%;
+}
+.highlights_title {
+    margin:0;
+    margin-bottom:0%;
+    bottom:0%;
+    margin-top:-5%;
+    margin-left:52%;
+}
+
+.moments_title {
+    width:40%;
+    margin-left:95%;
+    margin-top:15%;
+}
+
+.highlights_container_1 {
+    top: 98%;
+    left: 15%;
+}
+
+.highlights_container_2 {
+    top: 120%;
+    left: 15%;
+}
+
+.moments_container_1 {
+    top: 150%;
+    right: 15%;
+}
+
+.moments_container_2 {
+    top: 175%;
+    right: 15%;
+}
+
+.img_illustration_moments {
+    margin:0;
+    position: relative;
+    top:50px;
+    left:80%;
+    align-items: center;
+}
+
+.img_illustration_highlights {
+    margin:0;
+    position: relative;
+    top:450px;
+    align-items: center;
+}
+.clipboard{
+    margin-left:45%;
+    margin-top:15%;
 }
 
 ul {
+    margin: 0;
     list-style: none;
     padding: 0;
 }
 
-/*isolated analysis portion*/
 li {
+    text-align: left;
     padding: 10px;
-    background: #eef;
+    background-color: #D2E0FB;
     margin-bottom: 10px;
     border-left: 4px solid #007bff;
     border-radius: 4px;
 }
 
 li strong {
-    color: #94ec9a;
+    color: #007bff;
 }
 
 
+@media screen and (max-width: 1100px) {
+    .highlights_and_moments{
+        position:relative;
+        height:100%;
+        width: 100%; 
+        flex-direction: column;
+        align-items: center; 
+        justify-content: center; 
+    }
+    .Grammar_key_moments_title{
+        text-align: center;
+        position:relative;
+        margin:0;
+    }
+    .highlights_container_1, .highlights_container_2 
+   {
+        position:relative;
+        width: 80%; 
+        padding: 0 10px; 
+        margin:0;
+    }
+    .moments_container_1, .moments_container_2 {
+        position:relative;
+        left:15%;
+        width: 80%; 
+        padding: 0 10px; 
+    }
+
+    .feedback_title{
+        left:10%;
+    }
+    .score_and_numeric{
+        width:40%;
+    }
+    .img_illustration_analysis,.img_illustration_highlights, .img_illustration_moments {
+        display: none; 
+    }
+
+    .moments_title {
+        width: 35%;
+        text-align: center;
+        margin:0;
+        margin-left:35%;
+        bottom:0%;
+    }
+
+    .highlights_title{
+        margin:0;
+        margin-left:35%;
+        width: 35%;
+        text-align: center;
+    }
+    .column {
+        width: 100%; 
+        padding: 10px 0; 
+        float: none; 
+    }
+
+    .row {
+        flex-direction: column;
+    }
+}
