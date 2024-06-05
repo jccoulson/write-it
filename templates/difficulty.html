@@ -5,17 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/navbar.css"> 
     <link rel="stylesheet" href="/static/css/difficulty.css"> 
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <title>difficulty</title>
 </head>
 
 <div class="topnav">
     <a href="/">Home</a>
     <a href="/difficulty" class = "active">Difficulty</a>
-    <a href="/prompt">Prompt</a>
     <a href="/rankings">Rank Ladder</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
+    <a href="/about">About</a>
     {% if current_user.is_authenticated %}
         <a href="{{ url_for('logout') }}" class="auth-link">Logout</a>
     {% else %}
@@ -29,7 +29,35 @@
     <div class="row">
         <div class="column">
             <div class="container normal_container">
-                <h2>Normal</h2>
+                <h1>Normal</h1>
+                <div class="info_block ifb1">
+                <h3>Exercise</h3>
+                <div class="descriptor-container">
+                    <p>Normal writing prompt, we set the environment and setting, just start there and go wherever the mind leads!</p>    
+                    <img class = "paper_writing" src="/static/images/paper.png" alt="Normal Icon">
+                    <img class = "pencil_emoji" src="/static/images/pencil.png" alt="Pencil Emoji">
+                </div>
+                </div>
+                <div class="info_block ifb2">
+                    <h3>Example</h3>
+                    <p>Amidst the hustle and bustle of the royal kingdom of Magnora, a secret society operates unnoticed by regular townspeople. However, they play a significant role in shaping the kingdom's destiny. The moonlit meeting in the secluded castle's courtyard signals the unveiling of a secret so immense, it can reshape history. The society's members whisper amongst themselves under the cover of the ink-black night.</p></div>
+                <div class="info_block ifb3">
+                    <h3>Rules</h3>
+                    <div class="rules-container">
+                        <div class="circle_container">
+                            <div class="circle"></div>
+                            <p>2-minute timer</p>
+                        </div>
+                        <div class="circle_container">
+                            <div class="circle"></div>
+                            <p>No guidelines</p>
+                        </div>
+                        <div class="circle_container">
+                            <div class="circle"></div>
+                            <p>Free write</p>
+                        </div>
+                    </div>
+                </div>
                 <form action="/prompt" method="POST">
                     <button type="submit" name="mode" value="normal" class="normal_prompt_button">Write-It</button>
                 </form>
@@ -37,7 +65,35 @@
         </div>  
         <div class="column">
             <div class="container challenge_container">
-                <h2>Challenge</h2>
+                <h1>Challenge</h1>
+                <div class="info_block ifb1">
+                <h3>Exercise</h3>
+                <div class="descriptor-container">
+                    <p>Writing prompt with a challenge, there will be some type of grammatical rule that you have to follow, good luck!</p>    
+                    <img class = "paper_writing" src="/static/images/paper.png" alt="Normal Icon">
+                    <img class = "fire_emoji" src="/static/images/fire.png" alt="Fire Emoji">
+                </div>
+                </div>
+                <div class="info_block ifb2">
+                    <h3>Example</h3>
+                    <p>In the heart of a bustling city, a mysterious character, known only as the "Caller," offers people the chance to change their fate. One day, you agonizingly decide to accept the unknown temptation, turning your mundane life on its head. The challenge is to write this in a second-person perspective but with the additional wrinkle that you can't use any contractions throughout the narrative.</p></div>
+                <div class="info_block ifb3">
+                    <h3>Rules</h3>
+                    <div class="rules-container">
+                        <div class="circle_container">
+                            <div class="circle"></div>
+                            <p>4-minute timer</p>
+                        </div>
+                        <div class="circle_container">
+                            <div class="circle"></div>
+                            <p>Grammar rule</p>
+                        </div>
+                        <div class="circle_container">
+                            <div class="circle"></div>
+                            <p>Free write</p>
+                        </div>
+                    </div>
+                </div>
                 <form action="/prompt" method="POST">
                     <button type="submit" name="mode" value="challenge" class="challenge_prompt_button">Write-It</button>
                 </form>
@@ -45,7 +101,35 @@
         </div>
         <div class="column">
             <div class="container creative_container">
-                <h2>Creative</h2>
+                <h1>Creative</h1>
+                <div class="info_block ifb1">
+                <h3>Exercise</h3>
+                <div class="descriptor-container">
+                    <p>Creative prompt that starts with a fantastical setting, when writing for this don't be afraid to go off the rails!</p>    
+                    <img class = "paper_writing" src="/static/images/paper.png" alt="Normal Icon">
+                    <img class = "brain_emoji" src="/static/images/brain.png" alt="Brain Emoji">
+                </div>
+                </div>
+                <div class="info_block ifb2">
+                    <h3>Example</h3>
+                    <p>In a world where pastel clouds drift through the sky and the streets are filled with luminescent flowers, stands a city made entirely of watermelon sugar. The inhabitants are whimsical creatures, each unique, born from the sweet, pink sand that lays beneath the city. The city vibrates with the gentle hum of a thousand melodies only the city's dwellers can hear. One day, the melody changes.</p></div>
+                <div class="info_block ifb3">
+                    <h3>Rules</h3>
+                    <div class="rules-container">
+                        <div class="circle_container">
+                            <div class="circle"></div>
+                            <p>5-minute timer</p>
+                        </div>
+                        <div class="circle_container">
+                            <div class="circle"></div>
+                            <p>Be creative</p>
+                        </div>
+                        <div class="circle_container">
+                            <div class="circle"></div>
+                            <p>Free write</p>
+                        </div>
+                    </div>
+                </div>
                 <form action="/prompt" method="POST">
                     <button type="submit" name="mode" value="creative" class="creative_prompt_button">Write-It</button>
                 </form>

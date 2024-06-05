@@ -12,6 +12,7 @@
   padding: 14px 16px;
   text-decoration: none;
   font-size: 17px;
+  font-family: 'Arial', sans-serif;
 }
 
 /*for login, create account, and logout*/
@@ -25,6 +26,6 @@
 }
 
 .topnav a.active {
-  background-color: #04AA6D;
-  color: white;
+  background-color: #c1cdff;
+  color: black;
 }

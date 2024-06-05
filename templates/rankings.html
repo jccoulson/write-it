@@ -5,23 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/navbar.css"> 
     <link rel="stylesheet" href="/static/css/rankings.css"> 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <title>Rankings</title>
 </head>
+<div class="topnav">
+    <a href="/">Home</a>
+    <a href="/difficulty">Difficulty</a>
+    <a href="/rankings" class = "active">Rank Ladder</a>
+    <a href="/about">About</a>
+    {% if current_user.is_authenticated %}
+        <a href="{{ url_for('logout') }}" class="auth-link">Logout</a>
+    {% else %}
+        <a href="{{ url_for('login') }}" class="auth-link">Login</a>
+        <a href="{{ url_for('create_account') }}" class="auth-link">Sign Up</a>
+    {% endif %}
+</div>
 <body>
-    <div class="topnav">
-        <a href="/">Home</a>
-        <a href="/difficulty">Difficulty</a>
-        <a href="/prompt">Prompt</a>
-        <a href="/rankings" class="active">Rank Ladder</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-        {% if current_user.is_authenticated %}
-            <a href="{{ url_for('logout') }}" class="auth-link">Logout</a>
-        {% else %}
-            <a href="{{ url_for('login') }}" class="auth-link">Login</a>
-            <a href="{{ url_for('create_account') }}" class="auth-link">Sign Up</a>
-        {% endif %}
-    </div>
+
 
     <h1 class="leaderboard">Leaderboard</h1>
     <div class="row">
@@ -44,9 +46,11 @@
                         <form action="/read" method="POST">
                             <input type="hidden" name="mode" value="{{user[3]}}">
                             <input type="hidden" name="user_id" value="{{user[2]}}">
+                            <input type="hidden" name="username" value="{{user[1]}}">
                             <button type="submit">Read-It</button>
                         </form>
                     </td>
+                </tr>
                 {% endfor %}
             </table> 
         </div>
@@ -70,6 +74,7 @@
                         <form action="/read" method="POST">
                             <input type="hidden" name="mode" value="{{user[3]}}">
                             <input type="hidden" name="user_id" value="{{user[2]}}">
+                            <input type="hidden" name="username" value="{{user[1]}}">
                             <button type="submit">Read-It</button>
                         </form>
                     </td>
@@ -97,6 +102,7 @@
                         <form action="/read" method="POST">
                             <input type="hidden" name="mode" value="{{user[3]}}">
                             <input type="hidden" name="user_id" value="{{user[2]}}">
+                            <input type="hidden" name="username" value="{{user[1]}}">
                             <button type="submit">Read-It</button>
                         </form>
                     </td>
