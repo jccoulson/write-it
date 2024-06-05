@@ -1,4 +1,5 @@
 from flask import Flask, request, render_template, redirect, url_for, flash
+from markupsafe import escape
 from openai import AzureOpenAI
 import os
 from dotenv import load_dotenv
@@ -63,10 +64,13 @@ def read():
     if request.method == 'POST':
         mode = request.form['mode']
         user_id = request.form['user_id']
+        username = request.form['username']
         #grab the text from essay collection based on user_id and mode
         essay=essays_collection.find_one({'user_id':ObjectId(user_id),'mode':mode}, {'text':1})
-        #send the text only
-        return render_template('read.html', essay=essay['text'])
+        essay = escape(essay['text']) #remove any html tags user added just in case of malicious actors
+
+        #send the text and username
+        return render_template('read.html', essay=essay, username=username, mode=mode)
     else:
         return redirect('/rankings')
 
@@ -481,6 +485,11 @@ def create_account():
         flash('Account created successfully!')
         return redirect(url_for('login'))
     return render_template('create_account.html')
+
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
