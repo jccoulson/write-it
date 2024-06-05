@@ -1,63 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/navbar.css"> 
-    <link rel="stylesheet" href="/static/css/analysis.css">
-    <title>Analysis Page</title>
+    <link rel="stylesheet" href="/static/css/analysis.css"> 
+
+    <title>Analysis</title>
 </head>
+
 <div class="topnav">
     <a href="/">Home</a>
-    <a href="/difficulty">Difficulty</a>
+    <a href="/difficulty"> Difficulty</a>
+    <a href="/prompt">Prompt</a>
     <a href="/rankings">Rank Ladder</a>
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
     {% if current_user.is_authenticated %}
         <a href="{{ url_for('logout') }}" class="auth-link">Logout</a>
     {% else %}
-        <a href="{{ url_for('login') }}" class="auth-link active">Login</a>
+        <a href="{{ url_for('login') }}" class="auth-link">Login</a>
         <a href="{{ url_for('create_account') }}" class="auth-link">Sign Up</a>
     {% endif %}
 </div>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1>Essay Analysis</h1>
-        </header>
-        <div class="main-content">
-            <div class="text-analysis">
-                <section class="original-essay">
-                    <h2>Original Essay</h2>
-                    <p>
-                        {{response_list[0]}}
-                    </p>
-                </section>
-                <section class="essay-analysis">
-                    <h2>Analysis</h2>
-                    <p>
-                        {{response_list[1]}}
-                    </p>
-                </section>
-            </div>
-            <div class="additional-info">
-                <section class="essay-score">
-                    <h2>Score</h2>
+
+    <div class="main_container">
+        <div class="main_title_container">
+            <h1 class="analysis_title">
+                Analysis
+            </h1>
+        </div>
+        <div class="analysis_container">
+            <div class="score_and_numeric">
+                <div class="score">
+                    Score:
+                </div>
+                <div class="numeric_score">
                     <p>{{response_list[2]}}</p>
-                </section>
-                <section class="key-moments">
-                    <h2>Key Moments</h2>
+                </div>
+            </div>
+            <h2 class="feedback_title">
+                <p>
+                    Feedback
+                </p>
+            </h2>
+            <div class="feedback_container">
+                <ul>
+                    <li>
+                        {{response_list[1]}}                    
+                    </li>
+                </ul>
+            </div>
+            <div class="img_illustration_analysis">
+                <img class="pencil_paper" src="/static/images/pencil_paper.png" alt="Image of pencil and paper">  
+            </div>
+        </div>
+
+        <div class="highlights_and_moments">
+            <h1 class="Grammar_key_moments_title">
+                Key Moments
+            </h1>
+            <div class="row">
+                <div class="column">
+                    <h2 class="highlights_title">
+                        Highlights
+                    </h2>
+                    <div class="highlights_container_1">
+                        <ul>
+                            <li>
+                                <strong>Sentence:</strong>  
+                                {{text_parts[0]}} 
+                                <br>
+                                <strong>Commentary:</strong> 
+                                {{analysis_parts[0]}} 
+                                
+                                <br>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="highlights_container_2">
+                        <ul>
+                            <li>
+                                <strong>Sentence:</strong> 
+                                {{text_parts[1]}} 
+                                <br>
+                                <strong>Commentary:</strong> 
+                                {{analysis_parts[1]}} 
+                                <br>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="img_illustration_highlights">
+                        <img class="clipboard" src="/static/images/signature.png" alt="Image of clipboard">  
+                    </div>
+                </div>
+                <div class="column">
+                <div class="img_illustration_moments">
+                    <img class="certificate" src="/static/images/certificate.png" alt="Image of certificate">  
+                </div>
+                <h2 class="moments_title">
+                    Grammar Breakdown
+                </h2>
+                <div class="moments_container_1">
                     <ul>
-                        <li><strong>Sentence:</strong> {{text_parts[0]}} 
-                        <br>
-                        <strong>Commentary:</strong> {{analysis_parts[0]}}</li>
-                        <li><strong>Sentence:</strong> {{text_parts[1]}}  
-                        <br>
-                        <strong>Commentary:</strong> {{analysis_parts[1]}}</li>
+                        <li>
+                            <strong>Sentence:</strong>  
+                            {{text_parts2[0]}} 
+                            
+                            <br>
+                            <strong>Commentary:</strong> 
+                            {{analysis_parts2[0]}}
+                            
+                            <br>
+                        </li>
                     </ul>
-                </section>
+                </div>
+                <div class="moments_container_2">
+                    <ul>
+                        <li>
+                            <strong>Sentence:</strong> 
+                            
+                            {{text_parts2[1]}}
+                            <br>
+                            <strong>Commentary:</strong> 
+                            {{analysis_parts2[1]}}
+                            <br>
+                        </li>
+                    </ul>
+                </div>
+            </div>
             </div>
         </div>
     </div>
-    </body>
-    </html>
+</body>
+</html>

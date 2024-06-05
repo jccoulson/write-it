@@ -50,6 +50,7 @@ client = AzureOpenAI(
 def landing_page():
     return render_template('landing_page.html')
 
+
 #route for the difficulty selection page
 @app.route('/difficulty')
 @login_required
@@ -68,6 +69,11 @@ def read():
         return render_template('read.html', essay=essay['text'])
     else:
         return redirect('/rankings')
+
+
+@app.route('/temp')
+def temp():
+    return render_template('temp.html')
 
 #route for the rankings  page
 @app.route('/rankings')
@@ -223,7 +229,7 @@ def helper_generate_prompts():
 ####################### COMMENT OUT current_prompts WHEN DEVELOPING TO PRESERVE TOKENS ########################
 #globals for prompt
 #current_prompt is a list of dictionaries with key:["type"] key:["prompt"]
-# current_prompts = helper_generate_prompts()
+#current_prompts = helper_generate_prompts()
 last_gen_time = datetime.date.today()
 
 
@@ -259,6 +265,8 @@ def analysis():
     response_list = [""]*3
     text_parts = [""]*2
     analysis_parts = [""]*2
+    text_parts2 = [""]*2
+    analysis_parts2 = [""]*2
 
 
     if request.method == 'POST':
@@ -284,7 +292,7 @@ def analysis():
         #get current prompt
   
         #system message for gpt
-        system_message = f"""The user has written this writing as creative writing excersise. Write a paragraph giving your feedback to the writer. Be honest, if the writing is very poor say so, but if it very good say that too. If it is unintelligble do not be afraid to say so. Following the prompt I will show is very important to your analysis, if it does not follow the prompt mention that and make it a big part of your analysis.
+        system_message = f"""The user has written this writing as creative writing excersise. Write a 3 to 4 sentence paragraph giving your feedback to the writer. Be honest, if the writing is very poor say so, but if it very good say that too. If it is unintelligble do not be afraid to say so. Following the prompt I will show is very important to your analysis, if it does not follow the prompt mention that and make it a big part of your analysis.
         The writing was based on the following prompt, so keept that in mind for all of your feedback you will give:
         {current_prompt['prompt']}
         """
@@ -345,9 +353,42 @@ def analysis():
    
 
         #####QUERY 3#####
-        #get numerical score
-        system_message3 = "Now write a numerical score from 0-1000 for the original writing. Here is the rubric: 600 points for how well you think it was written and followed the prompt(if it didn't follow the prompt at all and seems irrelevant don't give it any of the 600 points), 200 points for length, and 200 points for your choosing for these last 200 points make it very difficult to get all 200 but it is possible but has to be a perfect piece of writing in your mind. The response is only the number, nothing else."
+        #isolated parts of grammar breakdown query
+        system_message3 ="""
+        Please isolate two specific excerpts from the writing that you found have grammar mistakes or exceptional grammar, 
+        and provide a brief breakdown for each. It's crucial that you format your response precisely as follows:
+        'First quote ||| First breakdown||| Second quote ||| Second breakdown'. 
+
+        Use '|||' to separate:
+        1. The first quote from the first breakdown.
+        2. The first breakdown from the second quote.
+        3. The second quote from the second breakdown.
+
+        Each breakdown should consist of only one sentence. Please do not number your responses or include additional text or punctuation outside the specified format. Each of the breakdown should be unique, do not say the same thing. Try not to use the First or Second analysis sentences unless necessary due to length of text given to you.
+        """
+
+
         messages_array.append({"role": "system", "content": system_message3})
+
+        response = client.chat.completions.create(
+            model="gpt-4", #needs to be gpt4, gpt3.5 cannot follow instructions
+            max_tokens=200,
+            messages=messages_array
+        )
+        grammar_analysis = response.choices[0].message.content
+        messages_array.append({"role": "assistant", "content": grammar_analysis})
+
+        #split on the special character told to gpt
+        parts = grammar_analysis.split('|||')
+        
+        #for grammar breakdown
+        text_parts2 = [part.strip() for part in parts[::2]]  #extract the text every 2nd element from beginning
+        analysis_parts2 = [part.strip() for part in parts[1::2]]  #extract the analysis every 2nd element from 1st element
+
+        #####QUERY 4#####
+        #get numerical score
+        system_message4 = "Now write a numerical score from 0-1000 for the original writing. Here is the rubric: 600 points for how well you think it was written and followed the prompt(if it didn't follow the prompt at all and seems irrelevant don't give it any of the 600 points), 200 points for length, and 200 points for your choosing for these last 200 points make it very difficult to get all 200 but it is possible but has to be a perfect piece of writing in your mind. The response is only the number, nothing else."
+        messages_array.append({"role": "system", "content": system_message4})
 
         response = client.chat.completions.create(
             model="gpt-4",
@@ -368,9 +409,11 @@ def analysis():
         }
         essays_collection.insert_one(essay_document)
 
-        return render_template('analysis.html', response_list=response_list, text_parts = text_parts, analysis_parts = analysis_parts)
+        return render_template('analysis.html', response_list=response_list, text_parts = text_parts, analysis_parts = analysis_parts,text_parts2=text_parts2,analysis_parts2=analysis_parts2)
     else:
-        return render_template('analysis.html', response_list=response_list, text_parts = text_parts, analysis_parts = analysis_parts)
+        #TODO - fix this, doesn't work 
+        return render_template('analysis.html', response_list=response_list, text_parts = text_parts, analysis_parts = analysis_parts,text_parts2=text_parts2,analysis_parts2=analysis_parts2)
+
 
 #usermixin has methods that check if the user is authenticated and other important things
 class User(UserMixin):
