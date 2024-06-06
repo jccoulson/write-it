@@ -95,7 +95,7 @@ h2 {
 
 .highlights_and_moments {
     height: 160%;
-    width: 75%;
+    width: 71%;
 }
 
 .feedback_container {
@@ -165,11 +165,6 @@ h2 {
     max-width: 200px;
     min-width: 175px;
 }
-.certificate,
-.clipboard {
-    height: 80%;
-    width: 63%;
-}
 
 .highlights_container_1,
 .highlights_container_2,
@@ -184,29 +179,46 @@ h2 {
 
 .img_illustration_moments,
 .img_illustration_highlights {
-    position: relative;
-    height: 35%;
-    width: 25%;
-    border-radius: 8px;
-    min-width: 450px;
-    min-height: 350px;
-    max-width: 450px;
-    max-width: 400px;
-    overflow: clip;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    width: 23%;
+    height: 50%;
 }
 
+.certificate,
+.clipboard {
+    height: 100%;
+    width: 100%;
+    min-height:300px;
+    min-width:350px;
+    max-height:500px;
+    max-width:500px;
+}
+
+.img_illustration_moments{
+    margin:0;
+    left:auto;
+    right:21%;
+    top:85%;
+}
+
+.img_illustration_highlights{
+    margin:0;
+    left:21%;
+    right:auto;
+    top:150%; 
+}
 
 .moments_title,
 .highlights_title,
 .Grammar_key_moments_title {
+    margin:0;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.1);
     background-color: #fffaf0;
     text-align: center;
     font-size: 170%;
-    position: static;
     border-radius: 8px;
-    width: 18%;
-    min-width: 200px;
 }
 
 .Grammar_key_moments_title {
@@ -216,57 +228,44 @@ h2 {
     left:35%;
 }
 .highlights_title {
-    margin:0;
-    margin-bottom:0%;
-    bottom:0%;
-    margin-top:-5%;
-    margin-left:52%;
+    position:absolute;
+    top:90%; 
+    left:23%;
+    width:18%;
 }
 
 .moments_title {
-    width:40%;
-    margin-left:95%;
-    margin-top:15%;
+    position:absolute;
+    top:137%; 
+    right:25%;
+    width:15%;
+    
 }
 
 .highlights_container_1 {
+    margin:0;
     top: 98%;
     left: 15%;
 }
 
 .highlights_container_2 {
+    margin:0;
     top: 120%;
     left: 15%;
 }
 
 .moments_container_1 {
+    margin:0;
     top: 150%;
     right: 15%;
 }
 
 .moments_container_2 {
+    margin:0;
     top: 175%;
     right: 15%;
 }
 
-.img_illustration_moments {
-    margin:0;
-    position: relative;
-    top:50px;
-    left:80%;
-    align-items: center;
-}
-
-.img_illustration_highlights {
-    margin:0;
-    position: relative;
-    top:450px;
-    align-items: center;
-}
-.clipboard{
-    margin-left:45%;
-    margin-top:15%;
-}
 
 ul {
     margin: 0;
@@ -294,13 +293,14 @@ li strong {
         height:100%;
         width: 100%; 
         flex-direction: column;
-        align-items: center; 
-        justify-content: center; 
+        align-items: center;
+        justify-content: center;
     }
     .Grammar_key_moments_title{
         text-align: center;
         position:relative;
         margin:0;
+        width:39%;
     }
     .highlights_container_1, .highlights_container_2 
    {
@@ -323,27 +323,29 @@ li strong {
         width:40%;
     }
     .img_illustration_analysis,.img_illustration_highlights, .img_illustration_moments {
-        display: none; 
+        display: none;
     }
 
     .moments_title {
+        position: relative;
         width: 35%;
         text-align: center;
         margin:0;
-        margin-left:35%;
+        margin-left:62%;
         bottom:0%;
     }
 
     .highlights_title{
+        position: relative;
         margin:0;
-        margin-left:35%;
+        margin-left:14%;
         width: 35%;
         text-align: center;
     }
     .column {
         width: 100%; 
-        padding: 10px 0; 
-        float: none; 
+        padding: 10px 0;
+        float: none;
     }
 
     .row {
