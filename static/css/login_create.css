@@ -53,14 +53,17 @@ button:hover {
     opacity: 0.8;
 }
 
-/*for messages such as account exists and login required*/
+
 .alert {
     background-color: #f4f4f4;
     border-left: 6px solid #ccc;
-    margin-top: 20px;
+    margin: 40px auto; 
     padding: 10px;
+    width: fit-content; 
+    text-align: center; 
 }
 
 .alert p {
+    font-size:22px;
     margin: 0;
 }

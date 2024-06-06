@@ -40,6 +40,22 @@ body {
     padding: 0 10px;  
 }
 
+/*custom scrollbar*/
+::-webkit-scrollbar {
+    width: 12px; 
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: darkgrey; 
+    border-radius: 6px; 
+}
+
+::-webkit-scrollbar-track {
+    background: white; 
+    border-radius: 6px;
+}
+
+
 .prompt-box {
     /*width is of outer container which is 100vw*/
     width: 50%;
@@ -49,7 +65,7 @@ body {
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin: 0 auto 20px auto; 
-    overflow: hidden;
+    overflow: auto;
 }
 
 .writing-area textarea {

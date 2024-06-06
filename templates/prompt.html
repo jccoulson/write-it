@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/navbar.css"> 
     <link rel="stylesheet" href="/static/css/prompt.css"> 
-    <script src="/static/js/timer.js" defer></script>
+    <script src="/static/js/prompt_script.js" defer></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -26,7 +26,15 @@
 </div>
 <body>
     <div class="container">
-        <div id="timer" class="timer">10:00</div>
+        <!--different timers for different modes -->
+        {% if current_mode == "normal" %}
+            <div id="timer" class="timer">10:00</div>
+        {% elif current_mode == "challenge" %}
+            <div id="timer" class="timer">20:00</div>
+        {% elif current_mode == "creative" %}
+            <div id="timer" class="timer">15:00</div>
+        {% endif %}
+
         <div class="prompt-box">
             <p>{{response_text}}</p>
         </div>
@@ -35,9 +43,11 @@
             <input type="hidden" name="mode" value="{{ current_mode }}">
             <div class="writing-area">
                 <textarea name="inputEssay" placeholder="Start writing here..."></textarea>
+                <div id="charCount">0 / 4000</div>
             </div>
             <button type="submit" class="analysis_button">Submit</button>
         </form>
+        <div id="validationMessage" style="color: red;"></div>
     </div>
 
 

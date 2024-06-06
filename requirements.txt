@@ -7,3 +7,4 @@ Flask-login==0.6.3
 scikit-learn==1.2.2
 sentence_transformers==3.0.0
 numpy==1.26.4
+detoxify==0.5.2 
