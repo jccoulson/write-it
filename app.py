@@ -12,6 +12,7 @@ from bson.objectid import ObjectId
 from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
 import numpy as np
+from detoxify import Detoxify
 
 
 
@@ -65,8 +66,9 @@ def read():
         mode = request.form['mode']
         user_id = request.form['user_id']
         username = request.form['username']
+        essay_id = request.form['essay_id']
         #grab the text from essay collection based on user_id and mode
-        essay=essays_collection.find_one({'user_id':ObjectId(user_id),'mode':mode}, {'text':1})
+        essay=essays_collection.find_one({'user_id':ObjectId(user_id),'mode':mode, '_id':ObjectId(essay_id)}, {'text':1})
         essay = escape(essay['text']) #remove any html tags user added just in case of malicious actors
 
         #send the text and username
@@ -79,16 +81,18 @@ def read():
 def temp():
     return render_template('temp.html')
 
+#currently is rankings from all time, take out the essay_id_list when we want to do current rankings and uncomment the essay clear on prompt generation
 #route for the rankings  page
 @app.route('/rankings')
 def rankings():
     #get top 10 scores, create a list that holds highest to lowest(0th element highest score)
-    top_normal= list(essays_collection.find({'mode': 'normal'}, {'_id': 0, 'user_id': 1, 'score': 1, 'text': 1,"mode":1}).sort('score', -1).limit(10))
-    top_challenge = list(essays_collection.find({'mode': 'challenge'}, {'_id': 0, 'user_id': 1, 'score': 1, 'text': 1,"mode":1}).sort('score', -1).limit(10))
-    top_creative = list(essays_collection.find({'mode': 'creative'}, {'_id': 0, 'user_id': 1, 'score': 1, 'text': 1,"mode":1}).sort('score', -1).limit(10))
+    top_normal= list(essays_collection.find({'mode': 'normal'}, {'_id': 1, 'user_id': 1, 'score': 1, 'text': 1,"mode":1}).sort('score', -1).limit(10))
+    top_challenge = list(essays_collection.find({'mode': 'challenge'}, {'_id': 1, 'user_id': 1, 'score': 1, 'text': 1,"mode":1}).sort('score', -1).limit(10))
+    top_creative = list(essays_collection.find({'mode': 'creative'}, {'_id': 1, 'user_id': 1, 'score': 1, 'text': 1,"mode":1}).sort('score', -1).limit(10))
     
     #nested function for repetition and readability
     def get_name_score(top_list):
+        essay_id_list = []
         score_list = []
         name_list = []
         userid_list = []
@@ -101,7 +105,8 @@ def rankings():
             score_list.append(essay['score'])
             userid_list.append(essay['user_id'])
             mode_list.append(essay['mode'])
-        return zip(score_list,name_list,userid_list,mode_list)
+            essay_id_list.append(essay['_id'])
+        return zip(score_list,name_list,userid_list,mode_list, essay_id_list)
     
     normal_zip = get_name_score(top_normal)
     challenge_zip = get_name_score(top_challenge)
@@ -141,8 +146,8 @@ def is_prompt_similar(new_prompt, threshold=0.8):
 
 #generate the writing prompts, should be called once per day
 def helper_generate_prompts():
-    #delete all of essays_collection, modify later to certain time period if want some history
-    essays_collection.delete_many({})
+    #delete all of essays_collection uncomment if we want only daily leaderboards
+    #essays_collection.delete_many({})
 
     list_of_prompts = []
 
@@ -233,7 +238,7 @@ def helper_generate_prompts():
 ####################### COMMENT OUT current_prompts WHEN DEVELOPING TO PRESERVE TOKENS ########################
 #globals for prompt
 #current_prompt is a list of dictionaries with key:["type"] key:["prompt"]
-#current_prompts = helper_generate_prompts()
+current_prompts = helper_generate_prompts()
 last_gen_time = datetime.date.today()
 
 
@@ -261,6 +266,41 @@ def prompt():
         return redirect('/difficulty')
    
 
+def check_toxicity(text):
+    results = Detoxify('original').predict(text)
+
+    #adjust threshold of toxicity if needed
+    #there are multiple types such as toxicity, obscene, threat, etc
+    needs_review = any(value >= 0.7 for value in results.values())
+    if needs_review:
+        client = AzureOpenAI(
+            azure_endpoint=azure_endpoint,
+            api_key=api_key,
+            api_version=api_version
+        )
+        system_message = f"""A user has written an essay as input for my web application. I will show your their content please judge if it is appropriate, swearing and graphic stories are allowed, but nothing considered extremely inappropriate or if they just entered hateful or extremely toxic content. Only answer with a number 0 if the content is acceptable to these guidlines, 1 if they are not. No other content except the number."""
+
+        messages_array = [
+            {"role": "system", "content": system_message},
+            {"role": "user", "content": text}
+        ]
+
+        response = client.chat.completions.create(
+            model="gpt-4",
+            max_tokens=10,
+            messages=messages_array
+        )
+        toxicity_analysis = response.choices[0].message.content
+
+        if toxicity_analysis == "0":
+            return False
+        else:
+            return True
+
+    return False
+        
+    
+
 #page that uses openai to analyze the submitted essay
 @app.route('/analysis', methods=['POST'])
 @login_required
@@ -283,8 +323,17 @@ def analysis():
         input_essay = request.form['inputEssay']
         mode = request.form['mode']
 
+        #TODO eventually redirect to page to tell them their content was deemed unaccpetable
+        if check_toxicity(input_essay) == True:
+            return redirect(url_for('prompt'))
+        
+
+
+
+        #TODO check if is used, for now doesnt seem like using for analysis?
         #will display back their essay on page
         response_list[0] = input_essay
+
 
         current_prompt = prompts_collection.find_one(
             {"active": True, "type": mode},  

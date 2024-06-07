@@ -67,7 +67,7 @@ p {
 
 @media (max-width: 1700px) {
     .header-content {
-        flex-direction: column;  /* Stack items vertically on smaller screens */
+        flex-direction: column;  
     }
 
     h1 {
@@ -78,8 +78,8 @@ p {
     }
 
     .trophy {
-        width: 20%;  /* Adjust width for better visibility */
-        margin: 20px auto;  /* Center the trophy */
+        width: 20%; 
+        margin: 20px auto; 
     }
 
     .container {

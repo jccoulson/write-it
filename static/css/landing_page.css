@@ -36,7 +36,7 @@ body {
     left: 65%;           
     z-index: 0;
     min-width: 400px;
-    min-height: 500px;
+    min-height: 600px;
 }
 
 
@@ -67,7 +67,7 @@ body {
     padding-bottom: 0;
     z-index: 1;
     min-width: 200px;
-    min-height: 150px;
+    min-height: 180px;
 }
 
 /* cubical foreground medium container*/
@@ -87,7 +87,8 @@ body {
     padding-bottom: 0;
     z-index: 1;
     min-width: 175px;
-    min-height: 100px;
+    min-height: 152px;
+    max-height:250px;
 }
 
 /* cubical foreground larger container*/
@@ -105,9 +106,9 @@ body {
     margin-left: 70%; /* align to the left */
     padding-bottom: 0px;
     z-index: 1;
-    overflow:clip;
+    overflow:hidden;
     min-width: 120px;
-    min-height: 70px;
+    min-height: 110px;
 }
 
 .intro_title{
@@ -118,7 +119,7 @@ body {
     background-color: transparent; 
     border-radius: 0;
     padding: 0; 
-    font-size: 55px;
+    font-size: clamp(55px, 3vw, 4vw);
     width: 25%;
     height: 20%;
     overflow:visible;
@@ -131,7 +132,7 @@ body {
     background-color: transparent;
     border-radius: 0;
     padding: 0; 
-    font-size: 20px;
+    font-size: clamp(16px, 1vw, 2vw);
     width: 65%;
     height: 20%;
     text-overflow: ellipsis;
@@ -148,7 +149,7 @@ body {
     font-family: "Poppins", sans-serif;
     font-weight:bold;
     padding:10px;
-    font-size: 13px;
+    font-size: clamp(13px, .7vw, 1vw);
     border: none;
     cursor: pointer;
 }
@@ -167,6 +168,7 @@ p {
 
 .paper_img {
     width: 60%;
+    max-width: 90px;
 }
 
 .emoji {
