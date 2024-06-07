@@ -7,26 +7,12 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
+    font-size: clamp(16px, 1vw, 2vw);
 }
 * {
     box-sizing: border-box;
 }
   
-/*custom scrollbar*/
-::-webkit-scrollbar {
-    width: 12px; 
-}
-
-::-webkit-scrollbar-thumb {
-    background-color: darkgrey; 
-    border-radius: 6px; 
-}
-
-::-webkit-scrollbar-track {
-    background: white; 
-    border-radius: 6px;
-}
-
 .row {
     margin-top: 5%;
 }
@@ -288,6 +274,10 @@ li strong {
 
 
 @media screen and (max-width: 1100px) {
+    .analysis_container{
+        font-size: clamp(16px, 2vw, 2vw);
+        
+    }
     .highlights_and_moments{
         position:relative;
         height:100%;
@@ -295,6 +285,11 @@ li strong {
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        font-size: clamp(16px, 2vw, 2vw);
+    }
+    .feedback_title{
+
+        min-width: 220px;
     }
     .Grammar_key_moments_title{
         text-align: center;

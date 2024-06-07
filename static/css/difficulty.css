@@ -27,7 +27,7 @@ body {
     height: auto; 
     padding-bottom: 2rem; 
     min-height: 70vh; 
-    background-color: #DDE4FF;
+    background-color: #d2e0fb;
     width: 75%;
     margin-left: auto;
     margin-right: 14%;
@@ -88,6 +88,10 @@ h1 {
     font-size: 36px;
 }
 
+.example {
+    background-color: #fffaf0;
+}
+
 h3 {
     font-family: "Poppins", sans-serif;
     font-weight: bold;
@@ -97,7 +101,7 @@ h3 {
     margin: 0 auto;
     padding: 10px;
     border-radius: 15px;
-    background-color: #DDE4FF;
+    background-color: #d2e0fb;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -106,7 +110,7 @@ img {
 }
 
 .ifb1 {
-    background-color: #F0F8FF;
+    background-color: #fffaf0 ;
 }
 
 .ifb1 p {
@@ -114,11 +118,11 @@ img {
 }
 
 .ifb2 {
-    background-color: #CFD8FF;
+    background-color: #d2e0fb;
 }
 
 .ifb3 {
-    background-color: #F0F8FF;
+    background-color: #fffaf0 ;
 }
 
 .rules-container {

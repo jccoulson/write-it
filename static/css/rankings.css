@@ -6,7 +6,7 @@
   }
   
   .row {
-    margin-top: 5%;
+    margin-top: 3%;
   }
     
   .column {
@@ -24,7 +24,7 @@
   /* this applies to all tables, ex: rounding the corners */
   table {
     border-collapse:separate;
-    border:solid #dde4ff 6px;
+    border:solid #c1cdff 6px;
     border-radius:8px;
     table-layout:fixed;
     border-spacing: 0;
@@ -35,14 +35,12 @@
     text-align: center;
     padding: 8px;
   }
-  h{
-    max-width: 70%;
-    font-size: 150%;
+  h2{
+    font-size: 200%;
     font-weight: bold;
-    margin-bottom: 1%;
   }
   .leaderboard{
-    font-size: 240%;
+    font-size: 380%;
     font-weight: bold;
     margin-top:1%;
   }
@@ -69,7 +67,7 @@
 
 /* for the sake of consistency and readability, bunch all the 3 table containers to change color-scheme */
 .normal_ranking tr:nth-child(even), .challenge_ranking tr:nth-child(even), .creative_ranking tr:nth-child(even) {
-    background: #dde4ff;
+    background: #faf6ee;
 }
 
 .normal_ranking tr:nth-child(odd), .challenge_ranking tr:nth-child(odd), .creative_ranking tr:nth-child(odd) {
