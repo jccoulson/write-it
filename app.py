@@ -23,7 +23,7 @@ app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
 
 #setting up mongoDB connection
-client = MongoClient('mongodb://localhost:27017/')
+client = MongoClient(os.getenv("AZURE_MONGO_CONNECTION_STRING"))
 db = client['writeit_db']  #the writeit-database
 users_collection = db.users
 #collection for daily essays
@@ -238,7 +238,7 @@ def helper_generate_prompts():
 ####################### COMMENT OUT current_prompts WHEN DEVELOPING TO PRESERVE TOKENS ########################
 #globals for prompt
 #current_prompt is a list of dictionaries with key:["type"] key:["prompt"]
-current_prompts = helper_generate_prompts()
+#current_prompts = helper_generate_prompts()
 last_gen_time = datetime.date.today()
 
 
