@@ -348,7 +348,7 @@ def analysis():
         system_message = f"""The user has written this writing as creative writing excersise. Write a 3 to 4 sentence paragraph giving your feedback to the writer. Be honest, if the writing is very poor say so, but if it very good say that too. If it is unintelligble do not be afraid to say so. Following the prompt I will show is very important to your analysis, if it does not follow the prompt mention that and make it a big part of your analysis.
         The writing was based on the following prompt, so keept that in mind for all of your feedback you will give:
         {current_prompt['prompt']}
-        """
+        Also, if the user has typed an unintelligible input or something that does not make sense such as: all whitespace characters, random characters, gibberish, etc... Then just respond with only one & character, nothing else except the & character if the input is invalid."""
 
         messages_array = [
             {"role": "system", "content": system_message},
@@ -357,7 +357,7 @@ def analysis():
 
         #Text analysis in paragraph form query
         response = client.chat.completions.create(
-            model="gpt-35-turbo",
+            model="gpt-4",
             max_tokens=200,
             messages=messages_array
         )
@@ -365,6 +365,12 @@ def analysis():
         #response given by gpt
         text_analysis = response.choices[0].message.content
 
+        #if there is an invalid input e.g whitespaces only or gibberish, the response back from gpt is &. 
+        #eventually needs to lead to error page
+        stripped_text= text_analysis.strip() #strip takes all leading and trailing whitespaces
+        if stripped_text == '&':
+            return redirect('/difficulty')
+        
         #add to messages_array for context on further analysis
         messages_array.append({"role": "assistant", "content": text_analysis}) 
 
@@ -375,7 +381,7 @@ def analysis():
         #####QUERY 2#####
         #isolated parts of text analysis query
         system_message2 ="""
-        Please isolate two specific excerpts from the writing that you found particularly interesting, 
+        Please isolate two specific sentences from the writing that you found particularly interesting, 
         and provide a brief analysis for each. It's crucial that you format your response precisely as follows:
         'First quote ||| First analysis ||| Second quote ||| Second analysis'. 
 
@@ -400,6 +406,8 @@ def analysis():
 
         #split on the special character told to gpt
         parts = isolated_analysis.split('|||')
+        print(isolated_analysis)
+        print(parts)
 
         text_parts = [part.strip() for part in parts[::2]]  #extract the text every 2nd element from beginning
         analysis_parts = [part.strip() for part in parts[1::2]]  #extract the analysis every 2nd element from 1st element
@@ -408,7 +416,7 @@ def analysis():
         #####QUERY 3#####
         #isolated parts of grammar breakdown query
         system_message3 ="""
-        Please isolate two specific excerpts from the writing that you found have grammar mistakes or exceptional grammar, 
+        Please isolate two specific sentences from the writing that you found have grammar mistakes or exceptional grammar, 
         and provide a brief breakdown for each. It's crucial that you format your response precisely as follows:
         'First quote ||| First breakdown||| Second quote ||| Second breakdown'. 
 
@@ -449,6 +457,11 @@ def analysis():
             messages=messages_array
         )
         score_analysis = response.choices[0].message.content
+
+        #an edge case when response is not a string containing digits
+        if not score_analysis.isdigit():
+            return redirect('/difficulty')
+        
         response_list[2] = score_analysis 
 
         ####Store in database ####
@@ -457,7 +470,7 @@ def analysis():
             'user_id': ObjectId(current_user.id),
             'text': input_essay,
             'mode': mode,
-            'score': score_analysis
+            'score': int(score_analysis)
             #add date if we wanted history up to a certain point later
         }
         essays_collection.insert_one(essay_document)
