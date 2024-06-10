@@ -3,43 +3,41 @@ body {
     margin: 0;
     background-color: #E7ECFF;
     text-align: center;
+    font-size: clamp(16px, 1vw, 2vw);
+}
+
+.header-content {
+    margin-top: 2%;
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+    position: relative; 
+    width: 100%;
+}
+
+h1.mode {
+    font-size: clamp(50px, 2.5vw, 3vw);
+    color: #333;
+    margin: 0;
+    z-index: 2; 
+}
+
+.book {
+    position: absolute; /*absolute to not affect mode title*/
+    left: 65%; /*because absolute need to position manually*/
+    width: 8vw;
+    min-width:150px;
 }
 
 .container {
     min-width: 300px;
     text-align: left;
     width: 45%;
-    margin: 0 auto;
-    margin-top: 5%;
+    margin: 20px auto;
     padding: 20px;
     border: 1px solid #ccc;
     box-shadow: 2px 2px 8px #888888;
     border-radius: 8px;
-}
-
-.header-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    width: 100%;
-    margin-bottom: -20px;
-}
-
-h1 {
-    font-size: 40px;
-    color: #333;
-    margin: 0;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-}
-
-.trophy {
-    width: 8%;
-    margin-right: 30%;
-    margin-left: auto;
-    min-width: 50px;
 }
 
 p {
@@ -50,7 +48,7 @@ p {
 }
 
 .user {
-    font-size: 40px;
+    font-size: clamp(35px, 2vw, 2vw);
     color: #4A63E7;
     font-weight: bold;
     background-color: #CFD8FF;
@@ -59,34 +57,18 @@ p {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     display: inline-block;
     text-shadow: 1px 1px 2px #767676;
+    margin-top: 20px;
 }
 
-.mode{
-    font-size:60px;
-}
-
-@media (max-width: 1700px) {
+@media (max-width: 1220px) {
     .header-content {
-        flex-direction: column;  
+        flex-direction: column; /*put the images in column when small screen*/
     }
 
-    h1 {
-        position: static;
-        transform: none;
-        text-align: center;
-        font-size: 30px;
+    .book {
+        width: 8vw;
+        width: 100px;
+        position: static; 
     }
 
-    .trophy {
-        width: 20%; 
-        margin: 20px auto; 
-    }
-
-    .container {
-        width: 45%;
-    }
-
-    .user {
-        font-size: 40px;
-    }
 }

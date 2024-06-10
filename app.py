@@ -23,7 +23,7 @@ app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
 
 #setting up mongoDB connection
-client = MongoClient('mongodb://localhost:27017/')
+client = MongoClient(os.getenv("AZURE_MONGO_CONNECTION_STRING"))
 db = client['writeit_db']  #the writeit-database
 users_collection = db.users
 #collection for daily essays

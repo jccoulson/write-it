@@ -32,8 +32,8 @@ body {
 /*text in the prompt box generated from openai, try to find better font*/
 .prompt-box p {
     color: #2a2a2a; 
-    font-size: 1.1rem; 
-    font-family: "Poppins", sans-serif; 
+    font-size: .95rem;
+
     line-height: 1.6;  
     text-align: justify;  
     margin: 0 0 15px 0; 
@@ -94,4 +94,17 @@ body {
     font-size: 1vw;
     border: none;
     cursor: pointer;
+}
+
+@media (min-width: 1920px) {
+    html {
+        font-size: .95rem; 
+    }
+}
+
+/*for very large monitors increase font size*/
+@media (min-width: 2560px) {
+    html {
+        font-size: 1.2rem; 
+    }
 }
