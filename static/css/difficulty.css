@@ -9,7 +9,6 @@ body {
     height: 100vh;  /*making sure all the content fits on screen*/
     width: 100vw;
     background-color: #E7ECFF;
-    display: flex;
     flex-direction: column;  /*the elements will stack vertically*/
     font-size: clamp(16px, .2vw, 2vw);
 }

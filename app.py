@@ -238,7 +238,7 @@ def helper_generate_prompts():
 ####################### COMMENT OUT current_prompts WHEN DEVELOPING TO PRESERVE TOKENS ########################
 #globals for prompt
 #current_prompt is a list of dictionaries with key:["type"] key:["prompt"]
-#current_prompts = helper_generate_prompts()
+current_prompts = helper_generate_prompts()
 last_gen_time = datetime.date.today()
 
 
