@@ -95,7 +95,7 @@ body {
     border: none;
     cursor: pointer;
 }
-
+/* adjust the font size for 1920x1080 */
 @media (min-width: 1920px) {
     html {
         font-size: .95rem; 

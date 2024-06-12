@@ -12,7 +12,7 @@
   padding: 14px 16px;
   text-decoration: none;
   font-size: 17px;
-  font-family: 'Arial', sans-serif;
+  font-family: 'Arial', sans-serif; /*keep "Arial" font - the "Poppins" font doesn't look as good*/
 }
 
 /*for login, create account, and logout*/
@@ -25,6 +25,7 @@
   color: black;
 }
 
+/* whichever page is active, make it different in color for styling */
 .topnav a.active {
   background-color: #c1cdff;
   color: black;

@@ -30,7 +30,7 @@
     border-spacing: 0;
     width: 100%;
   }
-  
+  /* th header cell in a table */
   th {
     text-align: center;
     padding: 8px;
@@ -39,6 +39,7 @@
     font-size: 200%;
     font-weight: bold;
   }
+  /* main page title */
   .leaderboard{
     font-size: 380%;
     font-weight: bold;
@@ -66,7 +67,7 @@
     text-align: center;
 }
 
-/* for the sake of consistency and readability, bunch all the 3 table containers to change color-scheme */
+/* for consistency and readability, bunch all the 3 table containers to change color-scheme */
 .normal_ranking tr:nth-child(even), .challenge_ranking tr:nth-child(even), .creative_ranking tr:nth-child(even) {
     background: #faf6ee;
 }
@@ -74,7 +75,7 @@
 .normal_ranking tr:nth-child(odd), .challenge_ranking tr:nth-child(odd), .creative_ranking tr:nth-child(odd) {
     background: #c1cdff;
 }
-
+/* each button is corresponding to a read page */
 button {
     overflow: hidden;
     background-color: black;

@@ -26,12 +26,16 @@
 
 <body>
     <h1 class="choose_mode">Choose Mode</h1>
+    <!-- puts all containers in a line -->
     <div class="row">
+        <!-- 3 columns for 3 different containers -->
         <div class="column">
+            <!-- container for normal prompt -->
             <div class="container normal_container">
                 <h1>Normal</h1>
                 <div class="info_block ifb1">
                 <h3 class = "exercise">Exercise</h3>
+                <!-- small description -->
                 <div class="descriptor-container">
                     <p>Normal writing prompt, we set the environment and setting, just start there and go wherever the mind leads!</p>    
                     <img class = "paper_writing" src="/static/images/paper.png" alt="Normal Icon">
@@ -40,9 +44,11 @@
                 </div>
                 <div class="info_block ifb2">
                     <h3 class = "example">Example</h3>
+                    <!-- sample text for context -->
                     <p>Amidst the hustle and bustle of the royal kingdom of Magnora, a secret society operates unnoticed by regular townspeople. However, they play a significant role in shaping the kingdom's destiny. The moonlit meeting in the secluded castle's courtyard signals the unveiling of a secret so immense, it can reshape history. The society's members whisper amongst themselves under the cover of the ink-black night.</p></div>
                 <div class="info_block ifb3">
                     <h3 class = "rules">Rules</h3>
+                    <!-- rules differ for each container -->
                     <div class="rules-container">
                         <div class="circle_container">
                             <div class="circle"></div>
@@ -58,12 +64,14 @@
                         </div>
                     </div>
                 </div>
+                <!-- sending post request for difficulty selection -->
                 <form action="/prompt" method="POST">
                     <button type="submit" name="mode" value="normal" class="normal_prompt_button">Write-It</button>
                 </form>
             </div>   
         </div>  
         <div class="column">
+            <!-- container for challenge prompt - same format as above -->
             <div class="container challenge_container">
                 <h1>Challenge</h1>
                 <div class="info_block ifb1">
@@ -100,6 +108,7 @@
             </div>
         </div>
         <div class="column">
+            <!-- container for creative prompt - same format as above -->
             <div class="container creative_container">
                 <h1>Creative</h1>
                 <div class="info_block ifb1">

@@ -34,9 +34,11 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
             </div>
+                <!-- if logged in, rerouted to landing page when -->
             <button type="submit">Login</button>
         </form>
     </div>
+    <!-- for displaying messages such as logging errors or required to log in before continuing to other pages -->
     {% with messages = get_flashed_messages() %}
     {% if messages %}
         <div class="alert">

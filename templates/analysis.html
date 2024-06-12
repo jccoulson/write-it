@@ -26,19 +26,21 @@
     {% endif %}
 </div>
 <body>
-
+    <!-- main_container is larger than body by 100% height, making the page scrollable -->
     <div class="main_container">
         <div class="main_title_container">
             <h1 class="analysis_title">
                 Analysis
             </h1>
         </div>
+        <!-- big container #1 - has feedback summary and score. all analysis info -->
         <div class="analysis_container">
             <div class="score_and_numeric">
                 <div class="score">
                     Score:
                 </div>
                 <div class="numeric_score">
+                    <!-- grab the score from from flask, ensured it is an integer -->
                     <p>{{response_list[2]}}</p>
                 </div>
             </div>
@@ -50,6 +52,7 @@
             <div class="feedback_container">
                 <ul>
                     <li>
+                        <!-- grab feedback from flask -->
                         {{response_list[1]}}                    
                     </li>
                 </ul>
@@ -59,10 +62,12 @@
             </div>
         </div>
 
+        <!-- big container #2 - has brief analysis of key moments and grammar highlights -->
         <div class="highlights_and_moments">
             <h1 class="Grammar_key_moments_title">
                 Key Moments
             </h1>
+            <!-- setting up for resolution changes, stack the highlights on top of eachother -->
             <div class="row">
                 <div class="column">
                     <h2 class="highlights_title">
@@ -71,6 +76,7 @@
                     <div class="highlights_container_1">
                         <ul>
                             <li>
+                                <!-- each text quoted from user has analysis corresponding to it -->
                                 <strong>Sentence:</strong>  
                                 {{text_parts[0]}} 
                                 <br>
@@ -84,6 +90,7 @@
                     <div class="highlights_container_2">
                         <ul>
                             <li>
+                                <!-- each text quoted from user has analysis corresponding to it -->
                                 <strong>Sentence:</strong> 
                                 {{text_parts[1]}} 
                                 <br>
@@ -107,6 +114,7 @@
                 <div class="moments_container_1">
                     <ul>
                         <li>
+                            <!-- each text quoted from user has analysis corresponding to it -->
                             <strong>Sentence:</strong>  
                             {{text_parts2[0]}} 
                             
@@ -121,6 +129,7 @@
                 <div class="moments_container_2">
                     <ul>
                         <li>
+                            <!-- each text quoted from user has analysis corresponding to it -->
                             <strong>Sentence:</strong> 
                             
                             {{text_parts2[1]}}

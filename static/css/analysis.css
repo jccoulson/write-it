@@ -1,3 +1,4 @@
+/* setting for the entire layout */
 body {
     font-family: "Poppins", sans-serif;
     margin: 0;
@@ -7,6 +8,7 @@ body {
     justify-content: center;
     align-items: center;
     text-align: center;
+    /* (min, preferred, max) */
     font-size: clamp(16px, 1vw, 2vw);
 }
 * {
@@ -16,7 +18,7 @@ body {
 .row {
     margin-top: 5%;
 }
-    
+/* used to stack analysis */
 .column {
     float: left;
     width: 33%;
@@ -29,7 +31,7 @@ body {
     display: table;
 }
 
-
+/* making all headers have eggshell bg, shadow, rounded edges, and specific color */
 h2 {
     border-radius: 8px;
     background-color: #D2E0FB;
@@ -40,8 +42,9 @@ h2 {
 .main_title_container {
     text-align: center;
 }
+/* settings for the page title */
 .analysis_title {
-    margin:0;
+    margin:0;/* margin 0 to reset all spaces around it */
     border-radius: 8px;
     width:25%;
     background-color: #fffaf0;
@@ -51,7 +54,7 @@ h2 {
     overflow:auto;
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3);
 }
-
+/* this contains highlights and comments, analysis container to allow them on top of each other with specific settings */
 .main_container {
     display: flex;
     flex-direction: column;
@@ -60,7 +63,7 @@ h2 {
     width: 100%;
     height: 200%;
 }
-
+/* two main containers */
 .highlights_and_moments,
 .analysis_container {
     border-radius: 8px;
@@ -83,7 +86,7 @@ h2 {
     height: 160%;
     width: 71%;
 }
-
+/* written analysis settings */
 .feedback_container {
     text-align: left;
     position: relative;
@@ -117,6 +120,7 @@ h2 {
     top: -30%;
     width: 40%;
 }
+/* this is a container for both numeric and score containers */
 .score_and_numeric {
     box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
@@ -130,6 +134,7 @@ h2 {
     align-items: center;
     justify-content: center;
 }
+/* individual/separate containers for numeric and score */
 .numeric_score,
 .score {
     font-weight: bold;
@@ -151,7 +156,7 @@ h2 {
     max-width: 200px;
     min-width: 175px;
 }
-
+/* inside the 2nd big container - settings for all 4 highlights/key moments containers */
 .highlights_container_1,
 .highlights_container_2,
 .moments_container_1,
@@ -162,7 +167,7 @@ h2 {
     border-radius: 8px;
     overflow: auto;
 }
-
+/* images containers */
 .img_illustration_moments,
 .img_illustration_highlights {
     display: flex;
@@ -171,7 +176,7 @@ h2 {
     width: 23%;
     height: 50%;
 }
-
+/* placeholder images for now */
 .certificate,
 .clipboard {
     height: 100%;
@@ -195,7 +200,7 @@ h2 {
     right:auto;
     top:150%; 
 }
-
+/* for consistency of format inside big container #2 */
 .moments_title,
 .highlights_title,
 .Grammar_key_moments_title {
@@ -252,7 +257,7 @@ h2 {
     right: 15%;
 }
 
-
+/* the highlights/moments analysis settings */
 ul {
     margin: 0;
     list-style: none;
@@ -272,11 +277,11 @@ li strong {
     color: #007bff;
 }
 
-
+/* once screen reaches width of 1100, change page's layout */
 @media screen and (max-width: 1100px) {
+    /* clamp(min, preferred, max) - ensures text sizing is adaptable with screen resolution(width) */
     .analysis_container{
         font-size: clamp(16px, 2vw, 2vw);
-        
     }
     .highlights_and_moments{
         position:relative;
@@ -291,6 +296,7 @@ li strong {
 
         min-width: 220px;
     }
+    /* adapt titles and containers to stack on each other properly */
     .Grammar_key_moments_title{
         text-align: center;
         position:relative;

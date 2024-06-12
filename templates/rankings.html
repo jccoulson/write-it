@@ -37,8 +37,10 @@
                     <th class="score">Score</th>
                     <th class="article">Read Article</th>
                 </tr>
+                <!-- get the highest top 10 ranking users from flask - username, text, user_id, essay, score(not in this order) -->
                 {% for user in top_normal %}
                 <tr class="normal_place">
+                    <!-- display place, username, and score -->
                     <td>{{ loop.index }}</td>
                     <td><p>{{ user[1]}}</p></td>
                     <td>{{ user[0]}}</td>
@@ -66,6 +68,7 @@
                     <th class="score">Score</th>
                     <th class="article">Read Article</th>
                 </tr>
+                <!-- look above for reference -->
                 {% for user in top_challenge %}
                 <tr class="challenge_place">
                     <td>{{ loop.index }}</td>
@@ -95,6 +98,7 @@
                     <th class="score">Score</th>
                     <th class="article">Read Article</th>
                 </tr>
+                <!-- same as above(normal) for reference -->
                 {% for user in top_creative %}
                 <tr class="creative_place">
                     <td>{{ loop.index }}</td>

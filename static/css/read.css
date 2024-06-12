@@ -1,3 +1,4 @@
+/* settings for page layout */
 body {
     font-family: "Poppins", sans-serif;
     margin: 0;
@@ -14,21 +15,21 @@ body {
     position: relative; 
     width: 100%;
 }
-
+/* mode can be any of the 3  - normal, challenge, creative */
 h1.mode {
     font-size: clamp(50px, 2.5vw, 3vw);
     color: #333;
     margin: 0;
     z-index: 2; 
 }
-
+/* book img */
 .book {
     position: absolute; /*absolute to not affect mode title*/
     left: 65%; /*because absolute need to position manually*/
     width: 8vw;
     min-width:150px;
 }
-
+/* user's story container */
 .container {
     min-width: 300px;
     text-align: left;
@@ -46,7 +47,7 @@ p {
     font-size: 18px;
     white-space: pre-wrap;
 }
-
+/* username display */
 .user {
     font-size: clamp(35px, 2vw, 2vw);
     color: #4A63E7;
@@ -60,6 +61,7 @@ p {
     margin-top: 20px;
 }
 
+/* adjust elements on screen accordingly at width 1220px and below */
 @media (max-width: 1220px) {
     .header-content {
         flex-direction: column; /*put the images in column when small screen*/
