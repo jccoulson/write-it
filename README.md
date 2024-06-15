@@ -1,8 +1,8 @@
 # Write-It
 ### By Jesse Coulson and Tamir Shem Tov
 This project was developed during a Microsoft AI Hackathon and uses Azure services. The aim of our application is to assist writers in practicing and enhancing their creativity through AI-generated prompts. 
-Each day, users are presented with three different prompts, categorized into unique 'modes.' Participants can respond to these prompts with essays, which are then evaluated and scored using OpenAI's models. Additionally, users have the opportunity to read essays submitted by others, compare scores, and view rankings on leaderboards for each mode. 
-To maintain a high quality user experience, our application leverages Huggingface transformers for detecting inappropriate content and employs embeddings to check for prompt similarity on generation. MongoDB is used as our database to be able to track user progress.
+Each day, users are presented with three different prompts, categorized into unique 'modes.' Participants can respond to these prompts with their own writings, which are then evaluated and scored using OpenAI's models. Additionally, users have the opportunity to read stories submitted by others, compare scores, and view rankings on leaderboards for each mode. 
+To maintain a high quality user experience, our application uses Detoxify which has a BERT based model for detecting inappropriate content. Additionally, we are using an OpenAI embedding model to store prompts as vectors, enabling the use of vector search for a RAG pipeline to ensure unique prompts. Azure Cosmos MongoDB is used as our database to be able to track user progress.
 ## Page Breakdown
 ### Landing Page
 - **Overview**: The landing page is the first thing users see when they visit our web application. It tells the user what the purpose of our application is and directs them to begin writing.
