@@ -19,9 +19,8 @@ To maintain a high quality user experience, our application uses Detoxify which 
 
 ### Prompt Page
 - **Overview**: This page displays the daily prompt generated for the selected difficulty.
-Users can enter their responses in the text area and submit them for feedback. Prompts are generated once per day. To make sure no two prompts are close to identical we use the Hugging Face Sentence Transformer.
-This transformer calculates embeddings for the current prompt and then we use cosine similarity to evaluate semantic similarity.
-If the prompt is too similar to previous ones, passing a certain threshold of cosine similarity, a new prompt is generated to ensure users the variety.
+Users can enter their responses in the text area and submit them for feedback. Prompts are generated once per day. To make sure no two prompts are close to identical we use RAG system to ensure GPT's unique output.
+The embeddings model uses cosine similarity to evaluate that the models are not too semantically similar.
 Additionally, submissions are screened for toxicity using a model based on the BERT architecture from the Detoxify python library.
 If a submission is found to be inappropriate, it is not analyzed further and the user is redirected.
 ![prompt](https://github.com/jccoulson/write-it/assets/28967794/6107f03c-dfdb-430e-b8d8-913db8dc0deb)
