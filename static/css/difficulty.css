@@ -26,7 +26,7 @@ body {
 }
 
 .column {
-    width: 33%;  /*33^ for equal distance of the three difficulty containers*/
+    width: 33%;  /*33% for equal distance of the three difficulty containers*/
     padding: 5px;
 }
 
@@ -137,7 +137,7 @@ h3 {
     max-height:140px;
     z-index: 1;
 }
-
+/* absolute position and z-index to be put on top of piece of paper img */
 .brain_emoji, .fire_emoji, .pencil_emoji {
     position: absolute;
     width: 8%;
@@ -149,19 +149,16 @@ h3 {
     min-height:40px;
 }
 
-.ifb1 {
+.ifb1, .ifb3 {
     background-color: #fffaf0;
 }
 
-
-.ifb3{
-    background-color: #fffaf0;
-}
-
+/* once screen reaches 1350 width, get all containers to stack on each other */
 @media screen and (max-width: 1350px) {
     .column {
         width: 70%;
     }
+    /* some space between */
     .challenge_prompt_button,
     .creative_prompt_button,
     .normal_prompt_button {

@@ -26,11 +26,14 @@
     <div class="container">
         <img src="/static/images/paper_pencil.png" alt="paper_pencil">
         <h2>Create Account</h2>
+        <!-- form to submit all user information -->
         <form method="POST" action="/create">
             <div class="form-group">
+                <!-- required - the form requires something in the textbox -->
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" required>
             </div>
+                <!-- Type - requires specific @something... -->
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required>
@@ -42,6 +45,7 @@
             <button type="submit">Create Account</button>
         </form>
     </div>
+    <!-- show message such as - "Account already exists" OR "Email already registered." -->
     {% with messages = get_flashed_messages() %}
     {% if messages %}
         <div class="alert">

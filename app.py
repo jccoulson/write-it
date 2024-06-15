@@ -16,12 +16,16 @@ import numpy as np
 from detoxify import Detoxify
 
 #basic logging setup
-logging.basicConfig(
-    filename='writeit.log',
-    level=logging.ERROR,
-    format='%(asctime)s %(levelname)s %(message)s',
-    datefmt='%Y-%m-%d %H:%M:%S'
-)
+logger = logging.getLogger('writeit')
+logger.setLevel(logging.ERROR)
+#makes sure we are only taking error level and below
+file_writer = logging.FileHandler('writeit.log')
+file_writer.setLevel(logging.ERROR)
+#putting date and time before message
+format= logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+file_writer.setFormatter(format)
+logger.addHandler(file_writer)
+
 load_dotenv()
 
 app = Flask(__name__)
@@ -40,7 +44,7 @@ try:
     prompts_collection = db.prompts
     state_collection = db.state
 except Exception as e:
-    logging.error(f"Failed to setup MongoDB connection, error: {e}")
+    logger.error(f"Failed to setup MongoDB connection, error: {e}")
     raise
 
 #login setup
@@ -49,7 +53,7 @@ try:
     login_manager.init_app(app)
     login_manager.login_view = 'login'
 except Exception as e:
-    logging.error(f"Failed to setup login manager, error: {e}")
+    logger.error(f"Failed to setup login manager, error: {e}")
     raise
 
 #variables for api
@@ -63,7 +67,7 @@ try:
         api_version=api_version
     )
 except Exception as e:
-    logging.error(f"Failed to init Azure Openai, error: {e}")
+    logger.error(f"Failed to init Azure Openai, error: {e}")
 
 #route for the landing page
 @app.route('/')
@@ -98,7 +102,7 @@ def read():
         else:
             return redirect('/rankings')
     except Exception as e:
-        logging.error(f"Could not get user essay, error: {e}")
+        logger.error(f"Could not get user essay, error: {e}")
         return render_template('landing_page.html', error=str(e))
 
 
@@ -140,7 +144,7 @@ def rankings():
 
         return render_template('rankings.html', top_normal=normal_zip,top_challenge=challenge_zip, top_creative=creative_zip)
     except Exception as e:
-        logging.error(f"Could not retrieve rankings: {e}")
+        logger.error(f"Could not retrieve rankings: {e}")
         return render_template('landing_page.html', error=str(e))
 
 
@@ -148,7 +152,7 @@ def rankings():
 try:
     model = SentenceTransformer('all-MiniLM-L6-v2')
 except Exception as e:
-    logging.error(f"Failed to load sentence transformer model, error: {e}")
+    logger.error(f"Failed to load sentence transformer model, error: {e}")
     raise
 
 #check similarity with existing prompts
@@ -176,10 +180,10 @@ def is_prompt_similar(new_prompt, threshold=0.8):
         max_similarity = np.max(similarities)
         #print("In is_prompt_similar - max similarity:", max_similarity)
         #print("In is_prompt_similar - similarities:", similarities)
-        logging.info(f"Current max similarity found on promp generation: {max_similarity}")
+        logger.error(f"Current max similarity found on promp generation: {max_similarity}")
         return max_similarity >= threshold
     except Exception as e:
-        logging.error(f"Error occured from checking promp similarity: {e}")
+        logger.error(f"Error occured from checking promp similarity: {e}")
         #just continue running
         return False
 
@@ -275,7 +279,7 @@ def helper_generate_prompts():
 
         return list_of_prompts
     except Exception as e:
-        logging.error(f"Error during prompt generation: {e}")
+        logger.error(f"Error during prompt generation: {e}")
         raise
 
 
@@ -312,7 +316,7 @@ def prompt():
         else:
             return redirect('/difficulty')
     except Exception as e:
-        logging.error(f"Error handling prompt generation or display: {e}")
+        logger.error(f"Error handling prompt generation or display: {e}")
         return render_template('landing_page.html', error=str(e))
    
 
@@ -322,7 +326,7 @@ def check_toxicity(text):
     try:
         results = Detoxify('original').predict(text)
     except Exception as e:
-        logging.error(f"Error with Detoxify model: {e}")
+        logger.error(f"Error with Detoxify model: {e}")
         #just go to gpt check for toxicity if model fails
         error_needs_review = True 
 
@@ -359,7 +363,7 @@ def check_toxicity(text):
 
         return False
     except Exception as e:
-        logging.error(f"Error during toxicity check with OpenAI: {e}")
+        logger.error(f"Error during toxicity check with OpenAI: {e}")
         return True #assume toxic if all fails, to be safe
 
     
@@ -384,7 +388,7 @@ def analysis():
                 api_version=api_version
             )
         except Exception as e:
-            logging.error(f"Failed to init Azure Openai, error: {e}")
+            logger.error(f"Failed to init Azure Openai, error: {e}")
             return render_template('landing_page.html', error=str(e))
 
         #get form data from submission of essay
@@ -408,7 +412,7 @@ def analysis():
                 {"type": 1, "prompt": 1, "_id": 0}  
             )
         except Exception as e:
-            logging.error(f"Database issue while finding current prompt on analysis page: {e}")
+            logger.error(f"Database issue while finding current prompt on analysis page: {e}")
             return render_template('landing_page.html', error=str(e))
         
 
@@ -453,7 +457,7 @@ def analysis():
         #isolated parts of text analysis query
         system_message2 ="""
         Please isolate two specific sentences from the writing that you found particularly interesting, 
-        and provide a brief analysis for each. It's crucial that you format your response precisely as follows:
+        and provide a 1 or 2 sentence analysis for each. It's crucial that you format your response precisely as follows:
         'First quote ||| First analysis ||| Second quote ||| Second analysis'. 
 
         Use '|||' to separate:
@@ -486,7 +490,7 @@ def analysis():
         #isolated parts of grammar breakdown query
         system_message3 ="""
         Please isolate two specific sentences from the writing that you found have grammar mistakes or exceptional grammar, 
-        and provide a brief breakdown for each. It's crucial that you format your response precisely as follows:
+        and provide a 1 or 2 sentence analysis for each. It's crucial that you format your response precisely as follows:
         'First quote ||| First breakdown||| Second quote ||| Second breakdown'. 
 
         Use '|||' to separate:
@@ -546,7 +550,7 @@ def analysis():
         try:
             essays_collection.insert_one(essay_document)
         except Exception as e:
-            logging.error(f"Database issue while inserting essay: {e}")
+            logger.error(f"Database issue while inserting essay: {e}")
             return render_template('landing_page.html', error=str(e))
 
         return render_template('analysis.html', response_list=response_list, text_parts = text_parts, analysis_parts = analysis_parts,text_parts2=text_parts2,analysis_parts2=analysis_parts2)
@@ -588,7 +592,7 @@ def login():
                 #display error message
                 flash('Invalid credentials. Please try again.')
         except Exception as e:
-            logging.error(f"Error occured in login page: {e}")
+            logger.error(f"Error occured in login page: {e}")
             return render_template('landing_page.html', error=str(e))
     return render_template('login.html')
 
@@ -626,7 +630,7 @@ def create_account():
             flash('Account created successfully!')
             return redirect(url_for('login'))
         except Exception as e:
-            logging.error(f"Error occured in create account page: {e}")
+            logger.error(f"Error occured in create account page: {e}")
             return render_template('landing_page.html', error=str(e))
     return render_template('create_account.html')
 

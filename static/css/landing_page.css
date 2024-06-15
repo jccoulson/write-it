@@ -21,7 +21,7 @@ body {
 }
 
 
-/* big bg vertcal container */
+/* big bg vertical container */
 .bg_container {
     position: absolute;  
     margin: 0;          
@@ -110,7 +110,7 @@ body {
     min-width: 120px;
     min-height: 110px;
 }
-
+/* clamp for viewport adjustments on all text */
 .intro_title{
     margin:0;
     margin-top:15%;
@@ -153,7 +153,7 @@ body {
     border: none;
     cursor: pointer;
 }
-
+/* on button hover change opacity */
 button:hover{
     opacity: 70%;
 }
@@ -166,6 +166,7 @@ p {
     margin:0;
 }
 
+/* settings for the imgs inside containers */
 .paper_img {
     width: 60%;
     max-width: 90px;
@@ -188,7 +189,7 @@ p {
     font-size: 14px;
  
 }
-
+/* on 1200 screen width, hide the img containers */
 @media (max-width: 1200px) {
     .bg_container, .large_container, .medium_container, .small_container {
         display: none;

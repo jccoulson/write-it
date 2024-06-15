@@ -35,6 +35,7 @@
             <div id="timer" class="timer">15:00</div>
         {% endif %}
 
+        <!-- for the prompt given from flask -->
         <div class="prompt-box">
             <p>{{response_text}}</p>
         </div>
@@ -43,10 +44,13 @@
             <input type="hidden" name="mode" value="{{ current_mode }}">
             <div class="writing-area">
                 <textarea name="inputEssay" placeholder="Start writing here..."></textarea>
+                <!-- showing number of chars written inside the essay box -->
                 <div id="charCount">0 / 4000</div>
             </div>
+            <!-- leads to analysis page -->
             <button type="submit" class="analysis_button">Submit</button>
         </form>
+        <!-- either too many chars or not enough chars error -->
         <div id="validationMessage" style="color: red;"></div>
     </div>
 
