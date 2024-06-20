@@ -10,8 +10,6 @@ import datetime
 import time
 from werkzeug.security import generate_password_hash, check_password_hash
 from bson.objectid import ObjectId
-from sklearn.metrics.pairwise import cosine_similarity
-from sentence_transformers import SentenceTransformer
 import numpy as np
 from detoxify import Detoxify
 
@@ -147,45 +145,89 @@ def rankings():
         logger.error(f"Could not retrieve rankings: {e}")
         return render_template('landing_page.html', error=str(e))
 
+#taking a text as param, using Azure openAI API, embedds it
+def generate_embeddings(text):
+    response = client.embeddings.create(input=text, model='text-embedding-ada-002')
+    embeddings = response.data[0].embedding
+    return embeddings
 
-#pre trained sentence transformer model for generating embeddings
-try:
-    model = SentenceTransformer('all-MiniLM-L6-v2')
-except Exception as e:
-    logger.error(f"Failed to load sentence transformer model, error: {e}")
-    raise
+#ATTENTION: ONLY TO BE CALLED ONCE AT START OF APP.PY
+def create_similarity_index(collection_name):
+    #this creates indexing for vector search to properly work
+    db.command({
+        #creates the indexes in the param collection name
+        'createIndexes': collection_name,
+        'indexes': [
+            {
+                'name': 'VectorSearchIndex',
+                'key': {
+                    "contentVector": "cosmosSearch"
+                },
+                'cosmosSearchOptions': {
+                    'kind': 'vector-ivf',
+                    'numLists': 1,
+                    'similarity': 'COS', #utilizing cosine similarity
+                    'dimensions': 1536  #dimensions too high = large runtime, too low = loss of information
+                }
+            }
+        ]
+    })
 
-#check similarity with existing prompts
-def is_prompt_similar(new_prompt, threshold=0.8):
-    try:
-        #get all prompts in database
-        results = list(prompts_collection.find({}, {"prompt": 1, "_id": 0}))
-        
-        #if empty then return false, e.g. no need to make comparisons
-        if not results:
-            print("No prompts found in the database.")
-            return False
-        
-        new_prompt_embedding = model.encode([new_prompt])
-        
-        #get all existing prompts and from the database and embedd them
-        all_prompts = list(prompts_collection.find({}, {"prompt": 1, "_id": 0}))
-        all_prompts_text = [item["prompt"] for item in all_prompts]
-        all_embeddings = model.encode(all_prompts_text)
-        
-        #use cosine similarity between new prompt and all existing prompts
-        similarities = cosine_similarity(new_prompt_embedding, all_embeddings)
-        
-        #if similarity exceeds threshhold(0.8) then return true(it is similar)
-        max_similarity = np.max(similarities)
-        #print("In is_prompt_similar - max similarity:", max_similarity)
-        #print("In is_prompt_similar - similarities:", similarities)
-        logger.error(f"Current max similarity found on promp generation: {max_similarity}")
-        return max_similarity >= threshold
-    except Exception as e:
-        logger.error(f"Error occured from checking promp similarity: {e}")
-        #just continue running
-        return False
+#vector searches on a specific vectorized prompt, default is 3 closest prompts, but generally we use 5
+def vector_search(collection_name, query, num_results=3):
+    #based on our collection name(prompts)
+    collection = db[collection_name]
+    #generate embeddings for current prompt
+    query_embedding = generate_embeddings(query)    
+    pipeline = [
+        {
+            '$search': {
+                #searching for the k-nearest results that are similar to vector query embeddings, looks for embeddings in the contentVector field
+                "cosmosSearch": {
+                    "vector": query_embedding,
+                    "path": "contentVector",
+                    "k": num_results
+                },
+                "returnStoredSource": True }},
+        {'$project': { 'similarityScore': { '$meta': 'searchScore' }, 'document' : '$$ROOT' } }
+    ]
+    results = collection.aggregate(pipeline)
+    return results
+
+#a reverse RAG pipeline for a unique prompt generation - takes in prompt and prompt type as params, then vector searches 5 closest essays to it,
+#then with a new message based on type, creates a new prompt that is different than the 5 closest to it
+def rag_with_vector_search(essay_prompt, type):
+    #grab the 5 closest essays to our param essay using vector search
+    results = vector_search("prompts", essay_prompt, num_results=5)
+
+    #adds the 5 essays to a one big string
+    essay_list = ""
+    for i,result in enumerate(results):
+        essay_list = essay_list + "\n" + result['document']['prompt'] + "\n"
+    
+    #based on type, generate a specific system message for new prompt
+    type_message = ""
+    if type == "normal":
+        type_message = """Make a normal, realistic prompt that is not too fantastical, the new prompt should be low on mysticism content. """
+    elif type == "challenge":
+        type_message = """Make a prompt that inlcudes a specific structural limitation, make sure that the new challenge you create is different than any of the other prompts. Make the challenge possible within the boundaries of writing on our website and make sure only one challenge is instructed for the prompt. """
+    else:
+        type_message = """Make a prompt that is creative and fantastical, the new prompt doesn't have to be realstic, but use understandable words to explain it. """
+    
+    #append the type specific instructions with general instructions
+    system_prompt = type_message+"""The newly generated prompt should ONLY 3-4 sentences long. The newly generated prompt content MUST be different than the following prompts BUT structurally similar to the individual prompts:\n"""
+    
+    #append both final instructions with the 5 most similar essays
+    formatted_prompt = ""
+    formatted_prompt = system_prompt + essay_list
+
+    messages = [
+        {"role": "system", "content": formatted_prompt}
+    ]
+    #create and return newly created prompt based on reverse RAG
+    completion = client.chat.completions.create(messages=messages, model='gpt-4')
+    return completion.choices[0].message.content
+
 
 #generate the writing prompts, should be called once per day
 def helper_generate_prompts():
@@ -259,22 +301,22 @@ def helper_generate_prompts():
         #creating a dictionary of prompt types with their system message stored
         prompt_types = {"normal": normal_system_message, "creative": creative_system_message, "challenge": challenge_system_message}
 
-        #if prompt unique, then store and move on to next prompt type, if not unique, keep re-generating with calling for is_prompt_unique func
+        #generates prompt for all types
         for prompt_type, system_message in prompt_types.items():
-            new_prompt = generate_prompt(system_message)
-            if(is_prompt_similar(new_prompt)):
-                new_prompt = generate_prompt(system_message)
-                list_of_prompts.append({"type": prompt_type, "prompt": new_prompt})
-            list_of_prompts.append({"type": prompt_type, "prompt": new_prompt})
+            new_prompt = generate_prompt(system_message) #initial prompt generated from database queries
+            new_prompt = rag_with_vector_search(new_prompt, prompt_type) #perform vector search for k-closest closest similarities, then create new prompt unlike them
+            list_of_prompts.append({"type": prompt_type, "prompt": new_prompt}) #appends to list
         
-
+        print("LIST OF PROMPTS COMPLETED:\n",list_of_prompts)
         prompts_collection.update_many({}, {"$set": {"active": False}})  #set all old prompts to not active
         for prompt in list_of_prompts:
+            content_vector = generate_embeddings(prompt["prompt"]) #embedds the new prompts prior to storing in database
             prompts_collection.insert_one({
                 "type": prompt["type"],
                 "prompt": prompt["prompt"],
                 "date": datetime.datetime.now(),
-                "active": True
+                "active": True,
+                "contentVector":content_vector #vectorized text
             })
 
         return list_of_prompts
@@ -639,16 +681,17 @@ def create_account():
 def about():
     return render_template('about.html')
 
-
+#this is running at the start of app.py
 def init_prompts():
-    if state_collection.count_documents({}) == 0:
+    #if current state_collection is empty generate new prompt(this should be on start)
+    if state_collection.count_documents({}) < 1:
         initial_prompts = helper_generate_prompts()
         state_collection.insert_one({
             "current_prompts": initial_prompts,
             "last_gen_time": datetime.datetime.now()
         })
-        for prompt in initial_prompts:
-            prompts_collection.insert_one(prompt)
+        #create indexes for RAG system - specific documentation on function above
+        create_similarity_index('prompts')
     return
 
 if __name__ == '__main__':

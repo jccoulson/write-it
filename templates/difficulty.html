@@ -65,7 +65,7 @@
                     </div>
                 </div>
                 <!-- sending post request for difficulty selection -->
-                <form action="/prompt" method="POST">
+                <form id="normal_form" action="/prompt" method="POST">
                     <button type="submit" name="mode" value="normal" class="normal_prompt_button">Write-It</button>
                 </form>
             </div>   
@@ -102,7 +102,7 @@
                         </div>
                     </div>
                 </div>
-                <form action="/prompt" method="POST">
+                <form id="challenge_form" action="/prompt" method="POST">
                     <button type="submit" name="mode" value="challenge" class="challenge_prompt_button">Write-It</button>
                 </form>
             </div>
@@ -139,10 +139,14 @@
                         </div>
                     </div>
                 </div>
-                <form action="/prompt" method="POST">
+                <!-- This creates a message for first generated prompts of the day, each type has this -->
+                <form id="creative_form" action="/prompt" method="POST">
                     <button type="submit" name="mode" value="creative" class="creative_prompt_button">Write-It</button>
                 </form>
-            </div>
+                <div id="loading_message" class="hidden">Congratulations! You are the first person to write-it today! Generating today's prompts for everybody...
+                </div>
+                    <script src="/static/js/loading_script.js"></script>
+                </div>
         </div>
     </div>
 
