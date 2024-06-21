@@ -108,3 +108,21 @@ body {
         font-size: 1.2rem; 
     }
 }
+
+.hidden {
+    display: none;
+}
+/* display message to user when ai is analyzing text */
+#loading_message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    border-radius: 10px;
+    z-index: 1000;
+    width:35%;
+}

@@ -20,5 +20,5 @@ function animateEllipses(loading_element) {
         dots = (dots + 1) % 4; //cycles through the ellipses .  ..  ...   .  ..  ...
         let dot_string = '.'.repeat(dots); //repeats the ellipses based dots variable, then turns into a string
         loading_element.textContent = baseText + dot_string;
-    }, 500); //how often the dots change
+    }, 750); //how often the dots change
 }
